@@ -22,9 +22,9 @@ const cookieParser = require('cookie-parser');                            // coo
 //  ┌──────────────────────────────┐
 //  │          CONSTANTS           │
 //  └──────────────────────────────┘
-const app = express();
-const PORT = process.env.PORT || 3000;
-const DEBUG = (process.env.NODE_ENV === 'development') || false;
+const app = express();                                                // create express server
+const PORT = process.env.PORT || 3000;                                // set constant for the port, default to 3000
+const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
 
 
 //  ┌──────────────────────────────┐
