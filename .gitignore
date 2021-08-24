@@ -4,3 +4,7 @@ node_modules
 # specific npm versions
 package-lock.json
 
+
+# config
+config
+
