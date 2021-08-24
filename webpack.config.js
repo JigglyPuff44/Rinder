@@ -8,7 +8,14 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  devServer: { contentBase: path.join(__dirname, 'src') },
+  devServer: {
+    static: path.join(__dirname, 'src'),
+    port: 8080,
+    hot: true, 
+    proxy: {
+      '/api': 'http://localhost:3000',
+    }, 
+  },
   module: {
     rules: [
       {
