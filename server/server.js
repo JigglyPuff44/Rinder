@@ -40,6 +40,10 @@ app.use(cookieParser());                          // parse any cookies found in 
 //  └──────────────────────────────┘
 
 
+//  ============== / ===============
+app.get('/', (req, res) => {
+  res.send(`You've contacted endpoint '/'`);
+});
 
 
 
