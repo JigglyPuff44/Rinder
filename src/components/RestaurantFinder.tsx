@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from '../state';
-import { RootState } from '../state/reducers';
+import React, { useState, Dispatch } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  NavLink,
+  useHistory,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { actionCreators } from "../state";
+import { RootState } from "../state/reducers";
 
 
 const RestaurantFinder = () => {
+  const dispatch = useDispatch();
+  const { newRestList } = bindActionCreators(actionCreators, dispatch);
+  const currentRoomID: any = useSelector<RootState>((state) => state.store);
+  const currentRestList: any = useSelector<RootState>((state) => state.store);
+
+  const handleSwipeLeft = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // go to the next restaurant in the list
+  }
+
+  const handleSwipeRight = (event: React.FormEvent) => {
+    event.preventDefault();
+    // increment this pictures likeTotal by 1
+    // go to the next restaurant in the list
+  }
+  
   // create image linked to api
-  // create 2 buttons for upvoting and downvoting
-  // create an h1 tag with the room id number
-  // create an h2 tag with the restaurant name
-  // create label for rating(hopefully changed to stars/icons later)
   return (
     <div>
-      <h1>Room ID Number: </h1>
-      <h2>The Chosen Restaurant is: </h2>
-      <div className="swipeLeftButton">
-        <button type="submit">Eww</button>
+      <div className="header">
+        <h1>Room ID Number: {currentRoomID.roomID}</h1>
+        <h2>Choose a restaurant: </h2>
+        <hr></hr>
+        <h2>Current Restaurant Name: </h2>
       </div>
+      <div className="swipeLeftButton">
+        <button onClick={handleSwipeLeft}>Eww</button>
+      </div>
+      <label>Rating: </label>
       <div className="swipeRightButton">
-        <button type="submit">Yum</button>
+        <button onClick={handleSwipeRight}>Yum</button>
       </div>
     </div>
   )
