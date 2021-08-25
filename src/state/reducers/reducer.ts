@@ -8,6 +8,7 @@ export interface State {
   userList: [];
   restList: [];
   restResult: {};
+  name: string;
 }
 
 const initialState = {
@@ -16,7 +17,8 @@ const initialState = {
   roomID: "",
   userList: [],
   restList: [],
-  restResult: {}
+  restResult: {},
+  name: ""
 };
 
 const reducer = (state: object = initialState, action: Action): object => {
@@ -45,6 +47,11 @@ const reducer = (state: object = initialState, action: Action): object => {
       return {
         ...state,
         restResult: action.payload,
+      };
+    case ActionType.NAME:
+      return {
+        ...state,
+        name: action.payload,
       };
     default:
       return state;

@@ -38,11 +38,20 @@ export const newRestList = (restList: Array<object>) => {
   };
 };
 
-export const newRestResult = (restList: object) => {
+export const newRestResult = (restResult: object) => {
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.RESTRESULT,
       payload: restResult,
+    });
+  };
+};
+
+export const newName = (name: string) => {
+  return (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionType.NAME,
+      payload: name,
     });
   };
 };
