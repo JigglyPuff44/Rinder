@@ -11,8 +11,8 @@ import {
 } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state';
+import { RootState } from '../state/reducers';
 import WaitingRoom from './WaitingRoom';
-
 
 // page needs text with user name at the top
 // div with create room button and location input text box
@@ -29,6 +29,31 @@ const HomePage = () => {
     actionCreators,
     dispatch
   );
+  // link to store for restaurant list
+  const currentRestList: any = useSelector<RootState>((state) => state.store);
+  // link to store for roomID
+  const currentRoomID: any = useSelector<RootState>((state) => state.store);
+
+  // post request to server to write into db of restaurant list 
+  const sendRestList = () => {
+    fetch('/restaurants', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(currentRestList.restList),
+    })
+      .catch((err) => console.log('this is err', err));
+  }
+
+  // get request to server for generated room id and save to store
+  const genRoomID = () => {
+    fetch('/roomID')
+      .then(res => res.json())
+      .then(data => newRoomID(data))
+      .catch((err) => console.log('this is err', err));
+  }
 
   const handleLocationSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -58,7 +83,21 @@ const HomePage = () => {
             realRestList.push(restaurantList);
           }
           newRestList(realRestList);
-        });
+        })
+        .then(() => sendRestList())
+        .then(() => genRoomID())
+        .then(() => {
+          return (
+            <Router>
+              <Switch>
+                <Route path={`/waiting/${currentRoomID.roomID}`}>
+                  <WaitingRoom />
+                </Route>
+              </Switch>
+            </Router>
+          );
+        })
+        .catch((err) => console.log('this is err', err));
     }
   };
   // handler for when user clicks the Join Room button
