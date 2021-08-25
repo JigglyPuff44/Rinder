@@ -80,6 +80,8 @@ const HomePage = () => {
             restaurantList.address = data.results.formatted_address;
             restaurantList.photo = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${data.results.photos[0].photo_reference}&sensor=false&maxheight=500&maxwidth=500&key=AIzaSyC5NRHs0hj0_DyAwHqoTJ0KcGHx_UOstcI`;
             realRestList.push(restaurantList);
+            // grabbing only 10 restaurants from list to save
+            if (realRestList.length >= 11) break; 
           }
           newRestList(realRestList);
         })
