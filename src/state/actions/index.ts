@@ -1,17 +1,9 @@
 import { ActionType } from "../action-types/index"
 
-interface DepositAction {
-    type: ActionType.DEPOSIT,
+interface UseridAction {
+    type: ActionType.USERID,
     payload: number
 }
 
-interface WithdrawAction {
-    type: ActionType.WITHDRAW,
-    payload: number
-}
-
-interface BankruptAction {
-    type: ActionType.BANKRUPT
-}
-
-export type Action = DepositAction | WithdrawAction | BankruptAction;
+export type Action = UseridAction;
+// export type Action = UseridAction | WithdrawAction | BankruptAction;

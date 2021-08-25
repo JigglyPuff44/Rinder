@@ -4,7 +4,9 @@ node_modules
 # specific npm versions
 package-lock.json
 
-
 # config
 config
+
+# winston log files
+*.log
 

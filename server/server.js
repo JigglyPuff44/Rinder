@@ -17,14 +17,14 @@
 const express = require('express');                                       // express server functionality
 const path = require('path');                                             // file path tools - filesystem agnostic path structures
 const cookieParser = require('cookie-parser');                            // cookie middleware
-
+const logger = require('./logger')                                        // logger created using winston logging library (to prevent typescript from complaining about console logs)
 
 //  ┌──────────────────────────────┐
 //  │          CONSTANTS           │
 //  └──────────────────────────────┘
 const app = express();                                                // create express server
 const PORT = process.env.PORT || 3000;                                // set constant for the port, default to 3000
-const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
+// const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
 
 
 //  ┌──────────────────────────────┐
@@ -40,6 +40,11 @@ app.use(cookieParser());                          // parse any cookies found in 
 //  └──────────────────────────────┘
 
 
+//  ============== / ===============
+app.get('/', (req, res) => {
+  logger.info(`[server.js] app.get '/' endpoint requested...`);
+  res.send(`You've contacted endpoint '/'`);
+});
 
 
 
