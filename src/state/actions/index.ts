@@ -12,12 +12,12 @@ interface RoomIDAction {
 
 interface UserListAction {
   type: ActionType.USERLIST,
-  payload: []
+  payload: Array<string>
 }
 
 interface RestListAction {
   type: ActionType.RESTLIST,
-  payload: []
+  payload: Array<string>
 }
 
 

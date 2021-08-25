@@ -20,7 +20,7 @@ export const newRoomID = (roomID: string) => {
   };
 };
 
-export const newUserList = (userList: []) => {
+export const newUserList = (userList: Array<string>) => {
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.USERLIST,
@@ -29,7 +29,7 @@ export const newUserList = (userList: []) => {
   };
 };
 
-export const newRestList = (restList: []) => {
+export const newRestList = (restList: Array<string>) => {
     return (dispatch: Dispatch<Action>) => {
       dispatch({
         type: ActionType.RESTLIST,
