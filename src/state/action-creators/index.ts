@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { ActionType } from "../action-types";
-import { Action } from "../actions/index";
+import { Dispatch } from 'redux';
+import { ActionType } from '../action-types';
+import { Action } from '../actions/index';
 
 export const newUserID = (userID: number) => {
   return (dispatch: Dispatch<Action>) => {
@@ -29,12 +29,11 @@ export const newUserList = (userList: Array<string>) => {
   };
 };
 
-export const newRestList = (restList: Array<string>) => {
-    return (dispatch: Dispatch<Action>) => {
-      dispatch({
-        type: ActionType.RESTLIST,
-        payload: restList,
-      });
-    };
+export const newRestList = (restList: Array<object>) => {
+  return (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionType.RESTLIST,
+      payload: restList,
+    });
   };
-  
+};
