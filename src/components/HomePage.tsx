@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state';
-import { RootState } from '../state/reducers';
+import WaitingRoom from './WaitingRoom';
+
 
 // page needs text with user name at the top
 // div with create room button and location input text box
@@ -29,21 +30,27 @@ const HomePage = () => {
         console.log('location was entered')
         // invoke api call file
         
-        // // get request to api
-        // fetch('/login')
-        // .then((res) => {
-        //     // if the location doesn't exist
-        //     if (!res) {
-        //         // send error message
-        //         setWrongInfo(true);
-        //     } else {
-        //       // const roomID = Math.round(Math.random() * 9999);
-        //       <Redirect to={{
-        //         pathname: "/waiting" + roomID // need to grab from store 
-        //       }}/>
-        //     }
-        // })
-        // .catch(err => console.log('this is err', err));
+        // get request to api
+        fetch('/waiting')
+        .then((response) => response.json())
+        .then((res) => {
+            // if the location doesn't exist
+            if (!res) {
+                // send error message
+                setWrongInfo(true);
+            } else {
+              newRoomID(res);
+              return (
+                <Router>
+                  <Switch>
+                    <Route path={`/waiting/${roomID}`}>
+                      <WaitingRoom />
+                    </Route>
+                  </Switch>
+                </Router>
+              )}
+        })
+        .catch(err => console.log('this is err', err));
     }
   }
   // handler for when user clicks the Join Room button
@@ -65,18 +72,23 @@ const HomePage = () => {
           },
           body: JSON.stringify(roomIDBody)
         })
+        .then((response) => response.json())
         .then((res) => {
           // if there is no room with that Id
           if (!res) {
             // give error message
             setWrongInfo(true);
           } else {
-          // otherwise redirect user to waiting room
-          <Redirect to= {{
-            pathname: "/waiting" + roomID
-          }}/>
-        }
-      })
+          return (
+            <Router>
+              <Switch>
+                <Route path={`/waiting/${roomID}`}>
+                  <WaitingRoom />
+                </Route>
+              </Switch>
+            </Router>
+          )}
+        })
         .catch(err => console.log('this is err', err));
     }
   }
