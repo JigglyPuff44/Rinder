@@ -1,13 +1,6 @@
-import React, { useState, Dispatch } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  useHistory,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
