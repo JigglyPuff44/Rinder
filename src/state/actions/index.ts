@@ -10,7 +10,16 @@ interface RoomIDAction {
   payload: string
 }
 
+interface UserListAction {
+  type: ActionType.USERLIST,
+  payload: []
+}
+
+interface RestListAction {
+  type: ActionType.RESTLIST,
+  payload: []
+}
 
 
 
-export type Action = UserIDAction | RoomIDAction;
+export type Action = UserIDAction | RoomIDAction | UserListAction | RestListAction;
