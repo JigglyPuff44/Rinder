@@ -27,21 +27,23 @@ const HomePage = () => {
       // if not give error message
         setmissingInfo(true);
     } else {
-        // get request to api
-        fetch('/login')
-        .then((res) => {
-            // if the location doesn't exist
-            if (!res) {
-                // send error message
-                setwrongInfo(true);
-            } else {
-              // const roomID = Math.round(Math.random() * 9999);
-              <Redirect to={{
-                pathname: "/waiting" + roomID // need to grab from store 
-              }}/>
-            }
-        })
-        .catch(err => console.log('this is err', err));
+        // invoke api call file
+
+        // // get request to api
+        // fetch('/login')
+        // .then((res) => {
+        //     // if the location doesn't exist
+        //     if (!res) {
+        //         // send error message
+        //         setwrongInfo(true);
+        //     } else {
+        //       // const roomID = Math.round(Math.random() * 9999);
+        //       <Redirect to={{
+        //         pathname: "/waiting" + roomID // need to grab from store 
+        //       }}/>
+        //     }
+        // })
+        // .catch(err => console.log('this is err', err));
     }
   }
   // handler for when user clicks the Join Room button
