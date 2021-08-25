@@ -21,14 +21,36 @@ const RestaurantFinder = () => {
 
   const handleSwipeLeft = (event: React.FormEvent) => {
     event.preventDefault();
-
+    // increment this pictures likeTotal by 1
     // go to the next restaurant in the list
+    fetch("/restaurantFinder/left", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then((response) => response.json())
+    .catch((err) => {
+      console.log("err in post request in front end", err);
+    })
   }
 
   const handleSwipeRight = (event: React.FormEvent) => {
     event.preventDefault();
     // increment this pictures likeTotal by 1
     // go to the next restaurant in the list
+    fetch("/restaurantFinder/right", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then((response) => response.json())
+    .catch((err) => {
+      console.log("err in post request in front end", err);
+    })
   }
   
   // create image linked to api
