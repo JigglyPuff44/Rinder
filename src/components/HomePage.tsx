@@ -7,7 +7,7 @@ import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect }
 // div with join room button and roomId input text box
 const HomePage = () => {
   const [location, setLocation] = useState('');
-  const [roomId, setRoomId] = useState('');
+  const [roomID, setRoomID] = useState('');
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
 
@@ -15,9 +15,9 @@ const HomePage = () => {
   // const updateSession = () => dispatch(actions.updateSession());
   // const updateUser = (userInfo) => dispatch(actions.updateUser(userInfo));
 
-  interface IProps {
-    handleSearchTyping(event: React.FormEvent): void;
-  }
+  // interface IProps {
+  //   handleSearchTyping(event: React.FormEvent): void;
+  // }
   const handleLocationSubmit = (event:React.FormEvent) => {
     event.preventDefault();
 
@@ -27,7 +27,7 @@ const HomePage = () => {
       // if not give error message
         setmissingInfo(true);
     } else {
-        // location to server
+        // get request to api
         fetch('/login')
         .then((res) => {
             // if the location doesn't exist
@@ -35,9 +35,9 @@ const HomePage = () => {
                 // send error message
                 setwrongInfo(true);
             } else {
-              const roomId = Math.round(Math.random() * 9999);
+              // const roomID = Math.round(Math.random() * 9999);
               <Redirect to={{
-                pathname: "/waiting" + roomId // need to grab from store 
+                pathname: "/waiting" + roomID // need to grab from store 
               }}/>
             }
         })
@@ -45,17 +45,24 @@ const HomePage = () => {
     }
   }
   // handler for when user clicks the Join Room button
-  const handleRoomIdSubmit = (event:React.FormEvent) => {
+  const handleRoomIDSubmit = (event:React.FormEvent) => {
     event.preventDefault();
 
-    const roomIdBody = {roomId};
+    const roomIDBody = {roomID};
     // checks if user has entered a room id number
-    if (!roomIdBody) {
+    if (!roomIDBody) {
         // if not give error message
         setmissingInfo(true);
     } else {
         // sends username and password to server 
-        fetch('/login')
+        fetch('/login', {
+          method: 'POST',
+          mode: 'cors', 
+          headers: {
+          'Content-Type': 'application/json'              
+          },
+          body: JSON.stringify(roomIDBody)
+        })
         .then((res) => {
           // if there is no room with that Id
           if (!res) {
@@ -64,7 +71,7 @@ const HomePage = () => {
           } else {
           // otherwise redirect user to waiting room
           <Redirect to= {{
-            pathname: "/waiting" + roomId
+            pathname: "/waiting" + roomID
           }}/>
         }
       })
@@ -85,10 +92,10 @@ const HomePage = () => {
         {missingInfo ? <div>Please enter a location</div>:null}
         {wrongInfo ? <div>Please enter an accurate location</div>:null}
       </form>
-      <form onSubmit={handleRoomIdSubmit}> 
+      <form onSubmit={handleRoomIDSubmit}> 
         <label>
           <p>Enter the Room ID number</p>
-          <input type="text" name="roomIdText" onChange={event => setRoomId(event.target.value)}/>
+          <input type="text" name="roomIDText" onChange={event => setRoomID(event.target.value)}/>
         </label>
         <div className="joinRoomButton">
           <button type="submit">Join Room</button>

@@ -10,3 +10,12 @@ export const newUserID = (userID: number) => {
         })
     }
 }
+
+export const newRoomID = (roomID: string) => {
+  return (dispatch: Dispatch<Action>) => {
+      dispatch({
+          type: ActionType.ROOMID,
+          payload: roomID
+      })
+  }
+}

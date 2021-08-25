@@ -16,9 +16,9 @@ const Login = () => {
   // const updateSession = () => dispatch(actions.updateSession());
   // const updateUser = (userInfo) => dispatch(actions.updateUser(userInfo));
 
-  interface IProps {
-    handleSearchTyping(event: React.FormEvent): void;
-  }
+  // interface IProps {
+  //   handleSearchTyping(event: React.FormEvent): void;
+  // }
   const handleSubmit = (event:React.FormEvent) => {
     event.preventDefault();
     const frontBody = {username, password};
@@ -42,7 +42,7 @@ const Login = () => {
             }
             // } else {
             //   <Redirect to={{
-            //     pathname: "/home" + roomId // need to grab from store 
+            //     pathname: "/home" + roomID // need to grab from store 
             //     }}/>
             // }
         })
