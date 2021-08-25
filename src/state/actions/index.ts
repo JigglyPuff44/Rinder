@@ -20,8 +20,14 @@ interface RestListAction {
   payload: Array<object>;
 }
 
+interface RestResultAction {
+  type: ActionType.RESTRESULT;
+  payload: object;
+}
+
 export type Action =
   | UserIDAction
   | RoomIDAction
   | UserListAction
-  | RestListAction;
+  | RestListAction
+  | RestResultAction;

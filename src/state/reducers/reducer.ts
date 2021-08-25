@@ -7,6 +7,7 @@ export interface State {
   roomID: string;
   userList: [];
   restList: [];
+  restResult: {};
 }
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
   isLoggedIn: false,
   roomID: "",
   userList: [],
-  restList: []
+  restList: [],
+  restResult: {}
 };
 
 const reducer = (state: object = initialState, action: Action): object => {
@@ -38,6 +40,11 @@ const reducer = (state: object = initialState, action: Action): object => {
       return {
         ...state,
         restList: action.payload,
+      };
+    case ActionType.RESTRESULT:
+      return {
+        ...state,
+        restResult: action.payload,
       };
     default:
       return state;
