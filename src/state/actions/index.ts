@@ -25,9 +25,15 @@ interface RestResultAction {
   payload: object;
 }
 
+interface NameAction {
+  type: ActionType.NAME;
+  payload: string;
+}
+
 export type Action =
   | UserIDAction
   | RoomIDAction
   | UserListAction
   | RestListAction
+  | NameAction
   | RestResultAction;
