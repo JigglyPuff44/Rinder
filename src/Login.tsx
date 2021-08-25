@@ -16,9 +16,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const { newUserID } = bindActionCreators(actionCreators, dispatch)
 
-  // interface IProps {
-  //   handleSearchTyping(event: React.FormEvent): void;
-  // }
   const handleSubmit = (event:React.FormEvent) => {
     event.preventDefault();
     const frontBody = {username, password};
