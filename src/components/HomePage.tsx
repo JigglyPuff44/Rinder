@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators } from '../state';
 import { RootState } from '../state/reducers';
 import WaitingRoom from './WaitingRoom';
+
 // page needs text with user name at the top
 // div with create room button and location input text box
 // div with join room button and roomId input text box
@@ -124,15 +125,17 @@ const HomePage = () => {
             // give error message
             setWrongInfo(true);
           } else {
-            // otherwise redirect user to waiting room
-            <Redirect
-              to={{
-                pathname: '/waiting' + roomID,
-              }}
-            />;
-          }
+          return (
+            <Router>
+              <Switch>
+                <Route path={`/waiting/${roomID}`}>
+                  <WaitingRoom />
+                </Route>
+              </Switch>
+            </Router>
+          )}
         })
-        .catch((err) => console.log('this is err', err));
+        .catch(err => console.log('this is err', err));
     }
   };
   return (
