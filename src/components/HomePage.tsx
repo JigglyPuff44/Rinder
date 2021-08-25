@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect } from 'react-router-dom';
 
-import CreateRoom from './CreateRoom';
-import JoinRoom from './JoinRoom';
 // page needs text with user name at the top
 // div with create room button and location input text box
 // div with join room button and roomId input text box
@@ -24,27 +22,23 @@ const HomePage = () => {
     event.preventDefault();
 
     const locationBody = {location};
+    // checks if user has entered a location
     if (!locationBody) {
-        // checks if user has not put anything into either fields
+      // if not give error message
         setmissingInfo(true);
     } else {
-        // sends username and password to server 
-        fetch('/login', {
-          method: 'POST',
-          mode: 'cors', 
-          headers: {
-          'Content-Type': 'application/json'              
-        },
-          body: JSON.stringify(locationBody)
-        })
+        // location to server
+        fetch('/login')
         .then((res) => {
+            // if the location doesn't exist
             if (!res) {
-                // if the username/password is incorrect
+                // send error message
                 setwrongInfo(true);
             } else {
+              const roomId = Math.round(Math.random() * 9999);
               <Redirect to={{
-                pathname: "/home" + userId // need to grab from store 
-                }}/>
+                pathname: "/waiting" + roomId // need to grab from store 
+              }}/>
             }
         })
         .catch(err => console.log('this is err', err));
@@ -61,14 +55,7 @@ const HomePage = () => {
         setmissingInfo(true);
     } else {
         // sends username and password to server 
-        fetch('/login', {
-          method: 'POST',
-          mode: 'cors', 
-          headers: {
-          'Content-Type': 'application/json'              
-        },
-          body: JSON.stringify(roomId)
-        })
+        fetch('/login')
         .then((res) => {
           // if there is no room with that Id
           if (!res) {
@@ -77,7 +64,7 @@ const HomePage = () => {
           } else {
           // otherwise redirect user to waiting room
           <Redirect to= {{
-            pathname: "/waiting" + roomId // need to grab from store 
+            pathname: "/waiting" + roomId
           }}/>
         }
       })

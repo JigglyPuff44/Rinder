@@ -41,7 +41,7 @@ const Login = () => {
                 setwrongInfo(true);
             } else {
               <Redirect to={{
-                pathname: "/home" + roomId // need to grab from store 
+                pathname: "/home" + userId // need to grab from store 
                 }}/>
             }
         })
