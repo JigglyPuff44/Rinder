@@ -1,9 +1,16 @@
 import { ActionType } from "../action-types/index"
 
-interface UseridAction {
+interface UserIDAction {
     type: ActionType.USERID,
     payload: number
 }
 
-export type Action = UseridAction;
-// export type Action = UseridAction | WithdrawAction | BankruptAction;
+interface RoomIDAction {
+  type: ActionType.ROOMID,
+  payload: string
+}
+
+
+
+
+export type Action = UserIDAction | RoomIDAction;

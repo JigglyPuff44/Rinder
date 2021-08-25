@@ -16,9 +16,9 @@ const Login = () => {
   // const updateSession = () => dispatch(actions.updateSession());
   // const updateUser = (userInfo) => dispatch(actions.updateUser(userInfo));
 
-  interface IProps {
-    handleSearchTyping(event: React.FormEvent): void;
-  }
+  // interface IProps {
+  //   handleSearchTyping(event: React.FormEvent): void;
+  // }
   const handleSubmit = (event:React.FormEvent) => {
     event.preventDefault();
     const frontBody = {username, password};
@@ -39,11 +39,12 @@ const Login = () => {
             if (!res) {
                 // if the username/password is incorrect
                 setwrongInfo(true);
-            } else {
-              <Redirect to={{
-                pathname: "/home" + roomId // need to grab from store 
-                }}/>
             }
+            // } else {
+            //   <Redirect to={{
+            //     pathname: "/home" + roomID // need to grab from store 
+            //     }}/>
+            // }
         })
         .catch(err => console.log('this is err', err));
     }

@@ -1,3 +1,4 @@
 export enum ActionType {
-    USERID = "userid"
+    USERID = "userid",
+    ROOMID = "roomid"
 }
