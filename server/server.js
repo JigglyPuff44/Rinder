@@ -14,12 +14,10 @@
 //  ┌──────────────────────────────┐
 //  │        MODULE IMPORTS        │
 //  └──────────────────────────────┘
-import express, { Request, Response, NextFunction } from 'express';                                         // express server functionality
-import path from 'path';                                               // file path tools - filesystem agnostic path structures
-import cookieParser from 'cookie-parser';                              // cookie middleware
-import logger from './logger';                                         // logger created using winston logging library (to prevent typescript from complaining about console logs)
-import randomstring from 'randomstring';                               // random alphanumeric string generator used to create room ID
-
+const express = require('express');                                       // express server functionality
+const path = require('path');                                             // file path tools - filesystem agnostic path structures
+const cookieParser = require('cookie-parser');                            // cookie middleware
+const logger = require('./logger')                                        // logger created using winston logging library (to prevent typescript from complaining about console logs)
 
 //  ┌──────────────────────────────┐
 //  │          CONSTANTS           │
@@ -43,7 +41,7 @@ app.use(cookieParser());                          // parse any cookies found in 
 
 
 //  ============== / ===============
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
   logger.info(`[server.js] app.get '/' endpoint requested...`);
   res.send(`You've contacted endpoint '/'`);
 });
@@ -51,7 +49,7 @@ app.get('/', (req: Request, res: Response) => {
 
 
 //  ============= 404 ==============
-app.use( (req: Request, res: Response) =>{
+app.use((req, res) =>{
   res.status(404).send('Unable to fulfill your request');
 });
 
@@ -59,8 +57,8 @@ app.use( (req: Request, res: Response) =>{
 //  ┌──────────────────────────────┐
 //  │   UNIVERSAL ERROR HANDLER    │
 //  └──────────────────────────────┘
-app.use( (err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
+app.use((err, req, res, next) => {
+  console.error(err.log);
   // TODO: need to actually handle various errors here and send appropriate messages to client
   res.status(500).send(err.message);
 });
@@ -84,8 +82,6 @@ const colorReset = '\u001b[0m';
 
 // invoke the listener
 app.listen( PORT, async () => {
-
-  /* tslint:disable:no-console */
 
   // server info console msg
   console.log(`${colorBox}┌───────────────────────────────────────────┐`);
