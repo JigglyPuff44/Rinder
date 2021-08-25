@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -11,14 +11,15 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
-  
-  const dispatch = useDispatch();
-  // const updateSession = () => dispatch(actions.updateSession());
-  // const updateUser = (userInfo) => dispatch(actions.updateUser(userInfo));
 
-  interface IProps {
-    handleSearchTyping(event: React.FormEvent): void;
-  }
+  const currentUserID:any = useSelector<RootState>((state) => state.store);
+
+  const dispatch = useDispatch();
+  const { newUserID } = bindActionCreators(actionCreators, dispatch)
+
+  // interface IProps {
+  //   handleSearchTyping(event: React.FormEvent): void;
+  // }
   const handleSubmit = (event:React.FormEvent) => {
     event.preventDefault();
     const frontBody = {username, password};
@@ -35,14 +36,19 @@ const Login = () => {
             },
             body: JSON.stringify(frontBody)
         })
-        .then((res) => {
-            if (!res) {
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+            if (!data) {
                 // if the username/password is incorrect
                 setwrongInfo(true);
             } else {
-              <Redirect to={{
-                pathname: "/home" + roomId // need to grab from store 
+              newUserID(data);
+              return(<Redirect to={{
+                pathname: "/home" + currentUserID // need to grab from store 
                 }}/>
+              )
             }
         })
         .catch(err => console.log('this is err', err));
