@@ -52,7 +52,7 @@ const Login = () => {
             return (
               <Router>
                 <Switch>
-                  <Route path={`/home/ + ${currentUserID.userID}`}>
+                  <Route path={`/home/${currentUserID.userID}`}>
                     <HomePage />
                   </Route>
                 </Switch>
