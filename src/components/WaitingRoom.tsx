@@ -41,7 +41,7 @@ const WaitingRoom = () => {
     return (
       <Router>
         <Switch>
-          <Route path={`/restaurantFinder/ + ${currentRoomID.roomID}`}>
+          <Route path={`/restaurantFinder/${currentRoomID.roomID}`}>
             {/* </RestaurantFinder> */}
           </Route>
         </Switch>
