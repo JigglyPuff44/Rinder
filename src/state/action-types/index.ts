@@ -2,5 +2,6 @@ export enum ActionType {
     USERID = "userid",
     ROOMID = "roomid",
     USERLIST = "userlist",
-    RESTLIST = "restlist"
+    RESTLIST = "restlist",
+    RESTRESULT = "restresult"
 }

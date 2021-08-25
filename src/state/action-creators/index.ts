@@ -37,3 +37,12 @@ export const newRestList = (restList: Array<object>) => {
     });
   };
 };
+
+export const newRestResult = (restList: object) => {
+  return (dispatch: Dispatch<Action>) => {
+    dispatch({
+      type: ActionType.RESTRESULT,
+      payload: restResult,
+    });
+  };
+};
