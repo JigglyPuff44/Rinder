@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../state';
+import { RootState } from '../state/reducers';
 
 // page needs text with user name at the top
 // div with create room button and location input text box
@@ -8,16 +11,12 @@ import { BrowserRouter as Router, NavLink, useHistory, Route, Switch, Redirect }
 const HomePage = () => {
   const [location, setLocation] = useState('');
   const [roomID, setRoomID] = useState('');
-  const [missingInfo, setmissingInfo] = useState(false);
-  const [wrongInfo, setwrongInfo] = useState(false);
+  const [missingInfo, setMissingInfo] = useState(false);
+  const [wrongInfo, setWrongInfo] = useState(false);
 
   const dispatch = useDispatch();
-  // const updateSession = () => dispatch(actions.updateSession());
-  // const updateUser = (userInfo) => dispatch(actions.updateUser(userInfo));
+  const { newRoomID } = bindActionCreators(actionCreators, dispatch)
 
-  // interface IProps {
-  //   handleSearchTyping(event: React.FormEvent): void;
-  // }
   const handleLocationSubmit = (event:React.FormEvent) => {
     event.preventDefault();
 
@@ -25,17 +24,18 @@ const HomePage = () => {
     // checks if user has entered a location
     if (!locationBody) {
       // if not give error message
-        setmissingInfo(true);
+        setMissingInfo(true);
     } else {
+        console.log('location was entered')
         // invoke api call file
-
+        
         // // get request to api
         // fetch('/login')
         // .then((res) => {
         //     // if the location doesn't exist
         //     if (!res) {
         //         // send error message
-        //         setwrongInfo(true);
+        //         setWrongInfo(true);
         //     } else {
         //       // const roomID = Math.round(Math.random() * 9999);
         //       <Redirect to={{
@@ -54,7 +54,7 @@ const HomePage = () => {
     // checks if user has entered a room id number
     if (!roomIDBody) {
         // if not give error message
-        setmissingInfo(true);
+        setMissingInfo(true);
     } else {
         // sends username and password to server 
         fetch('/login', {
@@ -69,7 +69,7 @@ const HomePage = () => {
           // if there is no room with that Id
           if (!res) {
             // give error message
-            setwrongInfo(true);
+            setWrongInfo(true);
           } else {
           // otherwise redirect user to waiting room
           <Redirect to= {{
