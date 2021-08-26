@@ -29,10 +29,8 @@ const HomePage = () => {
     actionCreators,
     dispatch
   );
-  // link to store for restaurant list
-  const currentRestList: any = useSelector<RootState>((state) => state.store);
-  // link to store for roomID
-  const currentRoomID: any = useSelector<RootState>((state) => state.store);
+  // link to store
+  const store: any = useSelector<RootState>((state) => state.store);
 
   // post request to server to write into db of restaurant list 
   const sendRestList = () => {
@@ -42,7 +40,7 @@ const HomePage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(currentRestList.restList),
+      body: JSON.stringify(store.restList),
     })
       .catch((err) => console.log('this is err', err));
   }
@@ -92,7 +90,7 @@ const HomePage = () => {
           return (
             <Router>
               <Switch>
-                <Route path={`/waiting/${currentRoomID.roomID}`}>
+                <Route path={`/waiting/${store.roomID}`}>
                   <WaitingRoom />
                 </Route>
               </Switch>
@@ -142,7 +140,7 @@ const HomePage = () => {
   };
   return (
     <div className='homePage'>
-      <h1>Welcome to Rinder </h1>
+      <h1>Welcome to Rinder, {store.name} </h1>
       <form onSubmit={handleLocationSubmit}>
         <label>
           <p>Enter Location</p>
