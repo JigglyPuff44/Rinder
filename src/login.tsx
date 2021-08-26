@@ -24,6 +24,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
 
+  let history = useHistory();
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const frontBody = { username, password };
@@ -50,7 +52,7 @@ const Login = () => {
           } else {
             newUserID(data.user_id);
             newName(data.name);
-            return <Redirect to={`/home/${store.user_id}`} />;
+            return history.push(`/home/${store.user_id}`);
           }
         })
         .catch((err) => console.log("this is err", err));
