@@ -70,49 +70,57 @@ const HomePage = () => {
       console.log('location was entered');
       const userLocation = location.replace(' ', '+');
       console.log('this is userlocation', userLocation);
-      // const google_API = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+${userLocation}+united+states&key=AIzaSyC5NRHs0hj0_DyAwHqoTJ0KcGHx_UOstcI`;
-      // console.log('api', google_API)
-      // fetch(google_API,
-      //   {
-      //   mode: "no-cors",
-      //   method: "GET"
-      // })
-      //   .then(res => {
-      //     return res.json()})
-      //   .then(data => {
-      //     console.log('dataaaa', data);
-      //     const realRestList = [];
-      //     //iterate through the data that was sent back from google api
-      //     for (let i = 0; i < data.results.length; i++) {
-      //       //create an object to store name, rating, address, photo
-      //       const restaurantList: any = {};
-      //       restaurantList.name = data.results.name;
-      //       restaurantList.rating = data.results.rating;
-      //       restaurantList.address = data.results.formatted_address;
-      //       restaurantList.photo = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${data.results.photos[0].photo_reference}&sensor=false&maxheight=500&maxwidth=500&key=AIzaSyC5NRHs0hj0_DyAwHqoTJ0KcGHx_UOstcI`;
-      //       realRestList.push(restaurantList);
-      //       // grabbing only 10 restaurants from list to save
-      //       if (realRestList.length >= 11) break;
-      //     }
-      //     console.log('this is data', data);
-      //     newRestList(realRestList);
-      //   })
-      //   .then(() => sendRestList())
-      //   .then(() => genRoomID())
-      //   .then(() => {
-      //     history.push(`/waiting/${store.roomID}`);
-      //   })
-      //   .catch((err) => console.log('this is err', err));
-      fetch('https://api.yelp.com/v3/businesses/search?location=NYC', {
+      const google_API = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+${userLocation}+united+states&key=AIzaSyC5NRHs0hj0_DyAwHqoTJ0KcGHx_UOstcI`;
+      console.log('api', google_API)
+      fetch(google_API,
+        {
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'Bearers XCOuB7-lSc2CbHtRCfi3O1MOrqIUAr2r7NZHCuWLDVtvisJqoUT1yOFXlD_H067sm4SRHT4E_0pGUTZ1QPFOaIJjqz-zaYu3ZKA7Beu2NH854k1auhlyZVUUoPcnYXYx'
+          'Access-Control-Allow-Origin' : '*',
+          'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS'
         },
-        method: 'GET',
-        mode: 'cors'
+        mode: "cors",
+        method: "GET"
       })
-      .then(res => res.json())
-      .then(data => console.log('this is data', data));
+        .then(res => {
+          console.log('this is res', res);
+          return res.json()})
+        .then(data => {
+          console.log('dataaaa', data);
+          const realRestList = [];
+          //iterate through the data that was sent back from google api
+          for (let i = 0; i < data.results.length; i++) {
+            //create an object to store name, rating, address, photo
+            const restaurantList: any = {};
+            restaurantList.name = data.results.name;
+            restaurantList.rating = data.results.rating;
+            restaurantList.address = data.results.formatted_address;
+            restaurantList.photo = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${data.results.photos[0].photo_reference}&sensor=false&maxheight=500&maxwidth=500&key=AIzaSyC5NRHs0hj0_DyAwHqoTJ0KcGHx_UOstcI`;
+            realRestList.push(restaurantList);
+            // grabbing only 10 restaurants from list to save
+            if (realRestList.length >= 11) break;
+          }
+          console.log('this is data', data);
+          newRestList(realRestList);
+        })
+        .then(() => sendRestList())
+        .then(() => genRoomID())
+        .then(() => {
+          history.push(`/waiting/${store.roomID}`);
+        })
+        .catch((err) => console.log('this is err', err));
+    //   fetch('https://api.yelp.com/v3/businesses/search?location=NYC', {
+    //     headers: {
+    //       'Access-Control-Allow-Origin' : '*',
+    //       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    //       'Authorization': 'Bearers XCOuB7-lSc2CbHtRCfi3O1MOrqIUAr2r7NZHCuWLDVtvisJqoUT1yOFXlD_H067sm4SRHT4E_0pGUTZ1QPFOaIJjqz-zaYu3ZKA7Beu2NH854k1auhlyZVUUoPcnYXYx'
+    //     },
+    //     method: 'GET',
+    //     mode: 'cors'
+    //   })
+    //   .then(res => {
+    //     console.log('this is res', res);
+    //     res.json()})
+    //   .then(data => console.log('this is data', data));
     }
   };
   // handler for when user clicks the Join Room button

@@ -3,6 +3,7 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions/index';
 
 export const newUserID = (user_id: number) => {
+  console.log('hello from newUserID action', user_id);
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.USERID,

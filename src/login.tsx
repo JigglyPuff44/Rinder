@@ -12,7 +12,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "./state";
 import { RootState } from "./state/reducers";
 import HomePage from "./components/HomePage";
-import { newUserList } from "./state/action-creators";
+import { useEffect } from "react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -20,7 +20,10 @@ const Login = () => {
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
 
-  const store: any = useSelector<RootState>((state) => state.store);
+  const store: any = useSelector<RootState>((state) => {
+    console.log('this is state.store', state.store);
+    return state.store
+  });
 
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
@@ -29,6 +32,12 @@ const Login = () => {
 
   let history = useHistory();
   let returnData:any;
+
+  useEffect(() => {
+    if (store.user_id) {
+      history.push(`/home/${store.user_id}`);
+    }
+  },[store.user_id]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -57,19 +66,10 @@ const Login = () => {
             returnData = data;
             console.log('data_user', data.user_id)
             console.log('bind actions', bindAction);
-            // newUserID(30);
-            // console.log('this is newUserID', newUserID(30));
+            newUserID(data.user_id);
           }
         })
-        .then(() => {
-          console.log('this is newUserID', newUserID(30));
-        })
-        // .then(() => newName(returnData.name))
-        .then(() => {
-          console.log('this is store_user', store.user_id);
-          console.log('this is store', store);
-          history.push(`/home/${store.user_id}`);
-        })
+        .then(() => newName(returnData.name))
         .catch((err) => console.log("this is err", err));
     }
   };

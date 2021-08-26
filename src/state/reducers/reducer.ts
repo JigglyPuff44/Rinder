@@ -24,6 +24,7 @@ const initialState = {
 const reducer = (state: object = initialState, action: Action): object => {
   switch (action.type) {
     case ActionType.USERID:
+      console.log('hello from actiontype', action.payload);
       return {
         ...state,
         user_id: action.payload,
