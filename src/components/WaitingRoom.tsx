@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
@@ -11,6 +11,8 @@ const WaitingRoom = () => {
   const { newRestList } = bindActionCreators(actionCreators, dispatch);
   const currentRoomID: any = useSelector<RootState>((state) => state.store);
   const currentUserList: any = useSelector<RootState>((state) => state.store);
+
+  let history = useHistory();
 
   const fetchUsers = () => {
     fetch("/waiting")
@@ -31,9 +33,7 @@ const WaitingRoom = () => {
         newRestList(data);
       })
       .catch((err) => console.log("this is err", err));
-    return (
-      <Redirect to={`/restaurantFinder/${currentRoomID.roomID}`}/>
-    );
+    return history.push(`/restaurantFinder/${currentRoomID.roomID}`);
   };
 
   const individualUser: [] = [];

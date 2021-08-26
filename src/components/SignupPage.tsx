@@ -25,6 +25,8 @@ const SignUp = () => {
   const { newName, newUserID } = bindActionCreators(actionCreators, dispatch);
   const currentUserID: any = useSelector<RootState>((state) => state.store);
 
+  let history = useHistory();
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const signUpBody = { name, username, password };
@@ -53,9 +55,7 @@ const SignUp = () => {
             newName(data.name);
             newUserID(data.user_id);
             console.log('this is user_id', data.user_id);
-            return (
-              <Redirect to={`/home/${currentUserID.userID}`}/>
-            );
+            return history.push(`/home/${currentUserID.user_id}`);
           }
         })
         .catch((err) => console.log('this is err', err));
