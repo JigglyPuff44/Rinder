@@ -53,9 +53,38 @@ app.post('/login',
   <any>authController.verifyUser,
   (req: Request, res: Response) => {
     logger.info(`[server.ts] app.post '/login' endpoint: res.locals.userInfo:\n`, res.locals.userInfo)
-    res.json(res.locals.userInfo)
+    if (res.locals.userInfo === undefined){
+      res.json('username/password is incorrect')
+    } else {
+      res.json(res.locals.userInfo)  
+    }
   }
 ); // end of POST: /login
+
+
+//  ========= POST: /SIGNUP ========
+app.post('/signUp',
+  (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`[server.ts] app.post '/signUp' endpoint requested...`)
+    return next();
+  },
+  <any>authController.checkForExistingUser,
+  <any>authController.addUser,
+  (req: Request, res: Response) => {
+    logger.info(`[server.ts] app.post '/signUp' endpoint: res.locals.userInfo:\n`, res.locals.userInfo)
+    if (res.locals.bUserExists){
+      logger.info(`[server.ts] app.post '/signUp' username already exists ...`)
+      res.json('username already exists')
+    } else {
+      if (res.locals.userInfo === undefined){
+        res.json('username already exists') // this should really be a different response
+      } else {
+        res.json(res.locals.userInfo)  
+      }
+    }
+  }
+); // end of POST: /signUp
+
 
 
 //  ============ GET: / ============
