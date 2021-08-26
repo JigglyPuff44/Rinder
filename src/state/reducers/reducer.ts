@@ -1,18 +1,18 @@
 import { ActionType } from "../action-types/index";
 import { Action } from "../actions";
 
-export interface State {
-  userID: number;
-  isLoggedIn: boolean;
-  roomID: string;
-  userList: [];
-  restList: [];
-  restResult: {};
-  name: string;
-}
+// export interface State {
+//   user_id: number;
+//   isLoggedIn: boolean;
+//   roomID: string;
+//   userList: [];
+//   restList: [];
+//   restResult: {};
+//   name: string;
+// }
 
 const initialState = {
-  userID: 0,
+  user_id: 0,
   isLoggedIn: false,
   roomID: "",
   userList: [],
@@ -26,7 +26,7 @@ const reducer = (state: object = initialState, action: Action): object => {
     case ActionType.USERID:
       return {
         ...state,
-        userID: action.payload,
+        user_id: action.payload,
       };
     case ActionType.ROOMID:
       return {

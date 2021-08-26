@@ -61,6 +61,7 @@
     "@emotion/styled": "^11.3.0",
     "config": "^3.3.6",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "framer-motion": "^4.1.17",
     "pg": "^8.7.1",

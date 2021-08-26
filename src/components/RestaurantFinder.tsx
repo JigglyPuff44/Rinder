@@ -5,6 +5,7 @@ import {
   Route,
   Switch,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import { RootState } from "../state/reducers";
 import Results from "./Results";
@@ -14,11 +15,13 @@ const RestaurantFinder = () => {
   const store: any = useSelector<RootState>((state) => state.store);
   const [index, setIndex] = useState(0);
 
+  let history = useHistory();
+
   const handleSwipeNo = () => {
     if (index < 11) {
       setIndex(index + 1);
     } else if (index === 10) {
-      return <Redirect to={`/result/${store.roomID}`} />;
+      return history.push(`/result/${store.roomID}`);
     }
   };
 
@@ -40,7 +43,7 @@ const RestaurantFinder = () => {
     if (index < 11) {
       setIndex(index + 1);
     } else if (index === 10) {
-      return <Redirect to={`/results/${store.roomID}`} />;
+      return history.push(`/result/${store.roomID}`);
     }
   };
 

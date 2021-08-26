@@ -13,6 +13,15 @@ import { newUserID } from '../state/action-creators';
 import { actionCreators } from '../state';
 import { RootState } from '../state/reducers';
 import HomePage from './HomePage';
+import {
+  FormLabel,
+  Flex,
+  FormControl,
+  Heading,
+  Box,
+  Button,
+  Input,
+} from '@chakra-ui/react';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -24,6 +33,8 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const { newName, newUserID } = bindActionCreators(actionCreators, dispatch);
   const currentUserID: any = useSelector<RootState>((state) => state.store);
+
+  let history = useHistory();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,49 +64,91 @@ const SignUp = () => {
             newName(data.name);
             newUserID(data.user_id);
             console.log('this is user_id', data.user_id);
-            return (
-              <Redirect to={`/home/${currentUserID.userID}`}/>
-            );
+            return history.push(`/home/${currentUserID.user_id}`);
           }
         })
         .catch((err) => console.log('this is err', err));
     }
   };
   return (
-    <div className='SignupPage'>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Name</p>
-          <input
-            type='name'
-            name='name'
-            onChange={(event) => setName(event.target.value)}
-          />
-        </label>
-        <label>
-          <p>Username</p>
-          <input
-            type='text'
-            name='username'
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
-        <label>
-          <p>Password</p>
-          <input
-            type='password'
-            name='password'
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-        <div className='signUpButton'>
-          <button type='submit'>Sign Up</button>
+    <FormControl>
+      <Flex
+        direction='column'
+        align='center'
+        width='100%'
+        justifyContent='center'
+      >
+        <div className='SignupPage'>
+          <Flex
+            direction='column'
+            alignContent='center'
+            align='center'
+            justifyContent='center'
+          >
+            <Heading fontSize='lg'>Sign Up!</Heading>
+          </Flex>
+          <form onSubmit={handleSubmit}>
+            <FormLabel>Name</FormLabel>
+            <Flex
+              direction='column'
+              alignContent='center'
+              align='center'
+              justifyContent='center'
+            >
+              <Input
+                type='text'
+                name='name'
+                placeholder='Enter Name'
+                size='lg'
+                focusBorderColor='teal'
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Flex>
+            <FormLabel>Username</FormLabel>
+            <Flex
+              direction='column'
+              alignContent='center'
+              align='center'
+              justifyContent='center'
+            >
+              <Input
+                type='text'
+                name='username'
+                placeholder='Enter Username'
+                size='lg'
+                focusBorderColor='teal'
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </Flex>
+
+            <FormLabel>Password</FormLabel>
+            <Input
+              placeholder='Enter Password'
+              size='lg'
+              focusBorderColor='teal'
+              type='password'
+              name='password'
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <div className='signUpButton'>
+              <Flex
+                direction='column'
+                alignContent='center'
+                align='center'
+                justifyContent='center'
+              >
+                <Button type='submit' size='md' colorScheme='cyan'>
+                  Sign Up!
+                </Button>
+              </Flex>
+            </div>
+
+            {missingInfo ? <div>Please fill in all fields</div> : null}
+            {wrongInfo ? <div>Please enter correct information</div> : null}
+          </form>
         </div>
-        {missingInfo ? <div>Please fill in all fields</div> : null}
-        {wrongInfo ? <div>Please enter correct information</div> : null}
-      </form>
-    </div>
+      </Flex>
+    </FormControl>
   );
 };
 

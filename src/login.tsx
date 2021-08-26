@@ -7,25 +7,13 @@ import {
   Route,
   Switch,
   Redirect,
-} from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from './state';
-import { RootState } from './state/reducers';
-import HomePage from './components/HomePage';
-import {
-  ChakraProvider,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Flex,
-  Center,
-  Text,
-  Heading,
-  Box,
-  useColorMode,
-  IconButton,
-} from '@chakra-ui/react';
+} from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { actionCreators } from "./state";
+import { RootState } from "./state/reducers";
+import HomePage from "./components/HomePage";
+import { newUserList } from "./state/action-creators";
+import { FormLabel, Flex, FormControl, Heading, Box, Button, Input } from '@chakra-ui/react';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -37,6 +25,11 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
+  const bindAction = bindActionCreators(actionCreators, dispatch);
+
+
+  let history = useHistory();
+  let returnData:any;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -62,12 +55,23 @@ const Login = () => {
             // if the username/password is incorrect
             setwrongInfo(true);
           } else {
-            newUserID(data.user_id);
-            newName(data.name);
-            return <Redirect to={`/home/${store.user_id}`} />;
+            returnData = data;
+            console.log('data_user', data.user_id)
+            console.log('bind actions', bindAction);
+            // newUserID(30);
+            // console.log('this is newUserID', newUserID(30));
           }
         })
-        .catch((err) => console.log('this is err', err));
+        .then(() => {
+          console.log('this is newUserID', newUserID(30));
+        })
+        // .then(() => newName(returnData.name))
+        .then(() => {
+          console.log('this is store_user', store.user_id);
+          console.log('this is store', store);
+          history.push(`/home/${store.user_id}`);
+        })
+        .catch((err) => console.log("this is err", err));
     }
   };
   // if (document.cookie) {
