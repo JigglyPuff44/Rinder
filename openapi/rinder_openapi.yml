@@ -1,0 +1,21 @@
+openapi: 3.0.2
+info:
+  title: Rinder API
+  version: '1.0'
+servers:
+  - url: https://localhost:3000/
+paths:
+  /login:
+    post:
+      summary: >-
+        queries database to see if there is a user whose username and password
+        matches
+      description: >-
+        invokes verifyUser middleware to determine if there is a user record
+        that       matches both username and password, returns user_id
+      operationId: ''
+      responses:
+        '200':
+          description: returns JSON containing matching user_id
+        default:
+          description: Default error sample response

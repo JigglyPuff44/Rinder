@@ -28,10 +28,10 @@ DROP TABLE IF EXISTS "users";
 INSERT INTO "users" (username,password,room) 
 VALUES 
 ('ted','password','EPP95GQK1SV9MO22X'),
-('consectetuer','ZLN38SGU8RH','TWM10QBG3GS7YZ10Q'),
-('richard','YWY59UHR9ED','EPP95GQK1SV9MO22X'),
-('facilisis','GNR25QAZ9UE','EJG49ZKA6MP6IN34N'),
-('erat','OZQ82HDQ4EO','LEQ97DBA0FQ5XW41H'),
+('emma','password','EPP95GQK1SV9MO22X'),
+('may','password','EPP95GQK1SV9MO22X'),
+('faraz','password','EPP95GQK1SV9MO22X'),
+('richard','password','LEQ97DBA0FQ5XW41H'),
 ('at','DNL14FJE1QQ','BKA16OMV9AP8UF19B'),
 ('vitae','INH90OPR6MP','JBP09GBX4OC9VQ74M'),
 ('sapien.','YBT40GXG9EL','QNQ84WDV9ES5VA88A'),
