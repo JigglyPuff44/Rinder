@@ -2,50 +2,82 @@ import React, { useState, Dispatch } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
-  NavLink,
-  useHistory,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
+import Results from "./Results";
 
 
 const RestaurantFinder = () => {
   const dispatch = useDispatch();
-  const { newRestList } = bindActionCreators(actionCreators, dispatch);
-  const currentRoomID: any = useSelector<RootState>((state) => state.store);
-  const currentRestList: any = useSelector<RootState>((state) => state.store);
+  const store: any = useSelector<RootState>((state) => state.store);
+  const [index, setIndex] = useState(0);
 
-  const handleSwipeLeft = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    // go to the next restaurant in the list
+  const handleSwipeNo = () => {
+    if (index < 11) {
+      setIndex(index + 1);
+    } else if (index === 10) {
+      return (
+        <Router>
+          <Switch>
+            <Route path={`/result/${store.roomID}`}>
+              <Results/>
+            </Route>
+          </Switch>
+        </Router>
+      )
+    }
   }
 
-  const handleSwipeRight = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSwipeYes = () => {
     // increment this pictures likeTotal by 1
     // go to the next restaurant in the list
+    fetch("/restaurantFinder/yes", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify(store.restList[index].restaurantID) //from database primary key 
+    })
+    .then((response) => response.json())
+    .catch((err) => {
+      console.log("err in post request in front end", err);
+    })
+    if (index < 11) {
+      setIndex(index + 1);
+    } else if (index === 10) {
+      return (
+        <Router>
+          <Switch>
+            <Route path={`/results/${store.roomID}`}>
+              <Results/>
+            </Route>
+          </Switch>
+        </Router>
+      )
+    }
   }
-  
+
   // create image linked to api
   return (
     <div>
       <div className="header">
-        <h1>Room ID Number: {currentRoomID.roomID}</h1>
-        <h2>Choose a restaurant: </h2>
-        <hr></hr>
-        <h2>Current Restaurant Name: </h2>
+        <h2>Room ID Number: {store.roomID}</h2>
+      </div>
+      <hr></hr>
+      <div className="individualRest">
+          <h1>{store.restList[index].name}</h1>
+          <img src={store.restList[index].photo} />
+          <h2>Rating: {store.restList[index].rating}/5</h2>
+          <h2>Address: {store.restList[index].address}</h2>
       </div>
       <div className="swipeLeftButton">
-        <button onClick={handleSwipeLeft}>Eww</button>
+        <button onClick={handleSwipeNo}>Eww</button>
       </div>
-      <label>Rating: </label>
       <div className="swipeRightButton">
-        <button onClick={handleSwipeRight}>Yum</button>
+        <button onClick={handleSwipeYes}>Yum</button>
       </div>
     </div>
   )
