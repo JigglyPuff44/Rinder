@@ -40,6 +40,7 @@ const HomePage = () => {
       },
       body: JSON.stringify(store.restList),
     })
+      .then(res => res.json())
       .catch((err) => console.log('this is err', err));
   }
 
@@ -109,7 +110,7 @@ const HomePage = () => {
       setMissingInfo(true);
     } else {
       // sends username and password to server
-      fetch('/login', {
+      fetch('/roomID', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -117,9 +118,9 @@ const HomePage = () => {
         },
         body: JSON.stringify(roomIDBody),
       })
-        .then((res) => {
+        .then((data) => {
           // if there is no room with that Id
-          if (!res) {
+          if (!data) {
             // give error message
             setWrongInfo(true);
           } else {
