@@ -16,6 +16,7 @@ PostgreSQL
 ```sql
 CREATE TABLE "users" (
   user_id SERIAL PRIMARY KEY,
+  name varchar(255),
   username varchar(255),
   password varchar(255),
   room varchar(255)
@@ -25,18 +26,13 @@ CREATE TABLE "users" (
 DROP TABLE IF EXISTS "users";
 ```
 ```sql
-INSERT INTO "users" (username,password,room) 
+INSERT INTO "users" (name,username,password,room) 
 VALUES 
-('ted','password','EPP95GQK1SV9MO22X'),
-('emma','password','EPP95GQK1SV9MO22X'),
-('may','password','EPP95GQK1SV9MO22X'),
-('faraz','password','EPP95GQK1SV9MO22X'),
-('richard','password','LEQ97DBA0FQ5XW41H'),
-('at','DNL14FJE1QQ','BKA16OMV9AP8UF19B'),
-('vitae','INH90OPR6MP','JBP09GBX4OC9VQ74M'),
-('sapien.','YBT40GXG9EL','QNQ84WDV9ES5VA88A'),
-('elit','RXD28IQN3PB','PCR05HPY4JB0TF95A'),
-('Nunc','SZZ18QVS2RC','NJH80JKF4GQ9NG93Y')
+('ted','ted','password','EPP95GQK1SV9MO22X'),
+('emma','emma','password','EPP95GQK1SV9MO22X'),
+('may','may','password','EPP95GQK1SV9MO22X'),
+('faraz','faraz','password','EPP95GQK1SV9MO22X'),
+('richard','richard','password','LEQ97DBA0FQ5XW41H')
 ;
 ```
 

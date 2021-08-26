@@ -16,14 +16,9 @@ export { AuthController };  // export to stop TypeScript from complaining when i
 //  ┌──────────────────────────────┐
 //  │        MODULE IMPORTS        │
 //  └──────────────────────────────┘
-// import { Request, Response, NextFunction } from 'express'; // for typescript
-// import logger from "../logger"; // logger created using winston logging library (to prevent typescript from complaining about console logs)
-//import { pool as db } from '../../models/pgsql_model.js';
-//import { pool } from '../../models/pgsql_model.js';
-// import { PG } from '../../models/pgsql_model_class-based.js';
-// const db = new PG();
-const logger = require('../logger')
-const db = require('../../models/pgsql_model')
+const logger = require('../logger');
+const db = require('../../models/pgsql_model');
+const randomstring = require('randomstring');
 
 
 //  ┌──────────────────────────────┐
@@ -48,7 +43,7 @@ class AuthController {
     logger.info(`[authController.js] verifyUser:  username: ${username}, password: ${password}`);
 
     // define SQL query string and parameteric values
-    const queryText = 'SELECT user_id FROM users WHERE username = $1 AND password = $2';
+    const queryText = 'SELECT user_id, name FROM users WHERE username = $1 AND password = $2';
     const queryValues = [username, password];
 
     // submit query to the database
@@ -74,6 +69,128 @@ class AuthController {
     });
 
   } // end of verifyUser()
+
+//  ┌──────────────────────────────┐
+//  |   CHECK FOR EXISTING USER    |
+//  └──────────────────────────────┘
+checkForExistingUser(req, res, next){
+
+  logger.info('[authController.js] checkForExistingUser:  entering middleware');
+  logger.info('[authController.js] checkForExistingUser:  incoming req.body:\n', req.body);
+
+  const { name, username, password } = req.body;
+
+  logger.info(`[authController.js] checkForExistingUser:  user: ${name} username: ${username}, password: ${password}`);
+
+
+  // define SQL query string and parameteric values
+  //const queryText = 'SELECT user_id, name FROM users WHERE username = $1 AND password = $2';
+  const queryText = 'SELECT * FROM users WHERE username = $1';
+  const queryValues = [username];
+
+  // submit query to the database
+  //pool.query(queryText, queryValues, (err, result) =>{
+  db.query(queryText, queryValues, (err, result) => {
+    if (err){
+      // handle error here
+      // pass the error message object into next() in order to trigger the global error handler
+      return next(err);
+    } else {
+      
+      logger.info('[authController.js] checkForExistingUser:  result.rows:\n', result.rows);
+      
+      res.locals.bUserExists = false;
+
+      if (result.rows.length > 0) {
+        res.locals.bUserExists = true;
+      }
+      
+      logger.info('[authController.js] checkForExistingUser:  res.locals.bUserExists: ', res.locals.bUserExists);
+
+      return next();
+    }
+
+  });
+
+} // end of checkForExistinUser()
+
+
+
+
+//  ┌──────────────────────────────┐
+//  |           ADD USER           |
+//  └──────────────────────────────┘
+  addUser(req, res, next){
+
+    logger.info('[authController.js] addUser:  entering middleware');
+
+    logger.info('[authController.js] addUser:  res.locals.bUserExists:', res.locals.bUserExists);
+
+    if (res.locals.bUserExists){
+      // user already exists
+      return next();
+      //res.locals.userInfo = 'username already exists'
+
+    } else {
+      
+    // user doesn't exist
+
+    logger.info('[authController.js] addUser:  incoming req.body:\n', req.body);
+
+    const { name, username, password } = req.body;
+
+    logger.info(`[authController.js] addUser:  user: ${name} username: ${username}, password: ${password}`);
+ 
+
+    // define SQL query string and parameteric values
+    //const queryText = 'SELECT user_id, name FROM users WHERE username = $1 AND password = $2';
+    const queryText = 'INSERT INTO users (name,username,password) VALUES ($1, $2, $3) RETURNING user_id, name'
+    const queryValues = [name, username, password];
+
+    // submit query to the database
+    //pool.query(queryText, queryValues, (err, result) =>{
+    db.query(queryText, queryValues, (err, result) => {
+      if (err){
+        // handle error here
+        // pass the error message object into next() in order to trigger the global error handler
+        return next(err);
+      } else {
+        
+        logger.info('[authController.js] addUser:  result.rows:\n', result.rows);
+        
+        // assign result as userID to locals property on response object
+        res.locals.userInfo = result.rows[0];
+        
+        logger.info('[authController.js] addUser:  result.rows[0]: ', result.rows[0]);
+        logger.info('[authController.js] addUser:  res.locals.userInfo: ', res.locals.userInfo);
+
+        return next();
+      }
+
+    });
+    }
+
+  } // end of addUser()
+
+
+//  ┌──────────────────────────────┐
+//  |      GENERATE ROOM ID        |
+//  └──────────────────────────────┘
+  generateRoomId(req, res, next){
+
+  logger.info('[authController.js] generateRoomId:  entering middleware');
+  
+  // generate the roomId;
+  const roomId = randomstring.generate(4);
+    
+  logger.info(`[authController.js] generateRoomId:  roomId: ${roomId}`);
+
+  // add roomId to response object
+  res.locals.roomId = roomId;
+
+  logger.info(`[authController.js] generateRoomId:  res.locals.roomId: ${res.locals.roomId}`);
+
+  } // end of generateRoomId()
 
 
 } // end of AuthController
