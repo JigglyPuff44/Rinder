@@ -32,6 +32,19 @@ const PORT = process.env.PORT || 3000;                                // set con
 // const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
 const authController: AuthController = new AuthController();
 
+// ANSI colors for message visibilty
+// https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
+
+// declare labels to store color codes
+const colorBox = '\u001b[38;5;240m';
+const colorMsg = '\u001b[38;5;39m';
+const colorImportant = '\u001b[38;5;87m';
+const decoratorBold = '\u001b[1m';
+const colorReset = '\u001b[0m';
+const colorLogMain = '\u001b[38;5;214m';
+const colorLogBright = '\u001b[38;5;220m';
+
+
 //  ┌──────────────────────────────┐
 //  │   PRE- PARSING / FORMATTING  │
 //  └──────────────────────────────┘
@@ -46,45 +59,73 @@ app.use(cookieParser());                          // parse any cookies found in 
 
 //  ========= POST: /LOGIN =========
 app.post('/login',
+  
   (req: Request, res: Response, next: NextFunction) => {
-    logger.info(`[server.ts] app.post '/login' endpoint requested...`)
+    logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.post '/login' ${colorLogMain}endpoint requested...${colorReset}`);
     return next();
   },
+
   <any>authController.verifyUser,
+
   (req: Request, res: Response) => {
-    logger.info(`[server.ts] app.post '/login' endpoint: res.locals.userInfo:\n`, res.locals.userInfo)
+    logger.info(`[server.ts] app.post '/login' endpoint: res.locals.userInfo:\n`, res.locals.userInfo);
     if (res.locals.userInfo === undefined){
-      res.json('username/password is incorrect')
+      res.json('username/password is incorrect');
     } else {
-      res.json(res.locals.userInfo)  
+      res.json(res.locals.userInfo);
     }
   }
+
 ); // end of POST: /login
 
 
 //  ========= POST: /SIGNUP ========
 app.post('/signUp',
+
   (req: Request, res: Response, next: NextFunction) => {
-    logger.info(`[server.ts] app.post '/signUp' endpoint requested...`)
+    logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.post '/signUp' ${colorLogMain}endpoint requested...${colorReset}`);
     return next();
   },
+
   <any>authController.checkForExistingUser,
+
   <any>authController.addUser,
+
   (req: Request, res: Response) => {
-    logger.info(`[server.ts] app.post '/signUp' endpoint: res.locals.userInfo:\n`, res.locals.userInfo)
+    logger.info(`[server.ts] app.post '/signUp' endpoint: res.locals.userInfo:\n`, res.locals.userInfo);
     if (res.locals.bUserExists){
-      logger.info(`[server.ts] app.post '/signUp' username already exists ...`)
-      res.json('username already exists')
+      logger.info(`[server.ts] app.post '/signUp' username already exists ...`);
+      res.json('username already exists');
     } else {
       if (res.locals.userInfo === undefined){
-        res.json('username already exists') // this should really be a different response
+        res.json('username already exists'); // this should really be a different response
       } else {
-        res.json(res.locals.userInfo)  
+        res.json(res.locals.userInfo);
       }
     }
   }
+
 ); // end of POST: /signUp
 
+
+//  ========= GET: /ROOMID =========
+app.get('/roomID/:userId',
+
+  (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.get '/roomID' ${colorLogMain}endpoint requested...${colorReset}`);
+    return next();
+  },
+
+  <any>authController.generateRoomId,
+
+  (req: Request, res: Response) => {
+    //const roomId = res.locals.roomId;
+    //console.log(roomId);
+    logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.roomId: ${res.locals.roomId}`);
+    res.json(res.locals.roomId);
+  }
+
+); // end of GET: /roomID
 
 
 //  ============ GET: / ============
@@ -114,18 +155,6 @@ app.use( (err: any, req: Request, res: Response, next: NextFunction) => {
 //  ┌──────────────────────────────┐
 //  │           LISTENER           │
 //  └──────────────────────────────┘
-
-// ANSI colors for message visibilty
-// https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
-// format \u001b[38;5;39m
-// reset color \u001b[0m
-
-// declare labels to store color codes
-const colorBox = '\u001b[38;5;240m';
-const colorMsg = '\u001b[38;5;39m';
-const colorImportant = '\u001b[38;5;87m';
-const decoratorBold = '\u001b[1m';
-const colorReset = '\u001b[0m';
 
 // invoke the listener
 app.listen( PORT, async () => {
