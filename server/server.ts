@@ -113,15 +113,30 @@ app.get('/roomID/:userId',
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.get '/roomID' ${colorLogMain}endpoint requested...${colorReset}`);
+
+    logger.info(`[server.ts] app.get '/roomID':  req.params.userId: ${req.params.userId} (assigning to res.locals.userId...)`);
+
+    // assign userId to res.locals.userId
+    res.locals.userId = req.params.userId;
+
+    logger.info(`[server.ts] app.get '/roomID':  res.locals.userId: ${res.locals.userId}`);
+
     return next();
   },
 
   <any>authController.generateRoomId,
 
+  <any>authController.addRoomToUser,
+
   (req: Request, res: Response) => {
     //const roomId = res.locals.roomId;
     //console.log(roomId);
     logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.roomId: ${res.locals.roomId}`);
+    logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.roomAdded: `, res.locals.roomAdded);
+    
+    // what does the frontend want back?
+    // for now -- just sending roomId string
     res.json(res.locals.roomId);
   }
 

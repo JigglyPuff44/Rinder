@@ -6,6 +6,7 @@ PostgreSQL
 
 
 ## Database Schema (lite)
+This image is outdated.  Check Tables sections below for latest schema.
 
 ![](2021-08-24-21-07-42.png)
 
