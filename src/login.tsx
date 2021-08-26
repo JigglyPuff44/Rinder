@@ -1,5 +1,5 @@
-import React, { useState, Dispatch } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, Dispatch } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
   NavLink,
@@ -7,15 +7,29 @@ import {
   Route,
   Switch,
   Redirect,
-} from "react-router-dom";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "./state";
-import { RootState } from "./state/reducers";
-import HomePage from "./components/HomePage";
+} from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from './state';
+import { RootState } from './state/reducers';
+import HomePage from './components/HomePage';
+import {
+  ChakraProvider,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Flex,
+  Center,
+  Text,
+  Heading,
+  Box,
+  useColorMode,
+  IconButton,
+} from '@chakra-ui/react';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
 
@@ -32,11 +46,11 @@ const Login = () => {
       setmissingInfo(true);
     } else {
       // sends username and password to server
-      fetch("/login", {
-        method: "POST",
-        mode: "cors",
+      fetch('/login', {
+        method: 'POST',
+        mode: 'cors',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(frontBody),
       })
@@ -53,44 +67,78 @@ const Login = () => {
             return <Redirect to={`/home/${store.user_id}`} />;
           }
         })
-        .catch((err) => console.log("this is err", err));
+        .catch((err) => console.log('this is err', err));
     }
   };
   // if (document.cookie) {
   //   return <Redirect to="/home/:userID" />;
   // } else {
-    return (
-      <div className="login">
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <label>
-            <p>Username</p>
-            <input
-              type="text"
-              name="username"
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </label>
-          <label>
-            <p>Password</p>
-            <input
-              type="password"
-              name="password"
+  return (
+    <FormControl>
+      <Flex
+        direction='column'
+        align='center'
+        width='100%'
+        justifyContent='center'
+      >
+        <div className='login'>
+          <Flex
+            direction='column'
+            alignContent='center'
+            align='center'
+            justifyContent='center'
+          >
+            <Heading fontSize='lg'>Login</Heading>
+          </Flex>
+          <form onSubmit={handleSubmit}>
+            <FormLabel>Username</FormLabel>
+            <Flex
+              direction='column'
+              alignContent='center'
+              align='center'
+              justifyContent='center'
+            >
+              <Input
+                type='text'
+                name='username'
+                placeholder='Enter Username'
+                size='lg'
+                focusBorderColor='teal'
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </Flex>
+            <FormLabel>Password</FormLabel>
+            <Input
+              placeholder='Enter Password'
+              size='lg'
+              focusBorderColor='teal'
+              type='password'
+              name='password'
               onChange={(event) => setPassword(event.target.value)}
             />
-          </label>
-          <div className="loginButton">
-            <button type="submit">Login</button>
-          </div>
-          <div className="noAccount">
-            Don't have an account?{" "}
-            <NavLink to="/Signup">Create Account</NavLink>
-          </div>
-          {missingInfo ? <div>Please fill in all fields</div> : null}
-          {wrongInfo ? <div>Please enter correct information</div> : null}
-        </form>
-      </div>
-    );
+            <div className='loginButton'>
+              <Flex
+                direction='column'
+                alignContent='center'
+                align='center'
+                justifyContent='center'
+              >
+                <Button type='submit' size='md' colorScheme='cyan'>
+                  Login
+                </Button>
+              </Flex>
+            </div>
+            <div className='noAccount'>
+              Don't have an account?{' '}
+              <NavLink to='/Signup'>Create Account</NavLink>
+            </div>
+            {missingInfo ? <div>Please fill in all fields</div> : null}
+            {wrongInfo ? <div>Please enter correct information</div> : null}
+          </form>
+        </div>
+      </Flex>
+    </FormControl>
+  );
   // }
 };
 
