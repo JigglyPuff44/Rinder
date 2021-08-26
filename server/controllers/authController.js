@@ -105,7 +105,7 @@ checkForExistingUser(req, res, next){
         res.locals.bUserExists = true;
       }
       
-      logger.info('[authController.js] checkForExistingUser:  res.locals.bUserExists: ', res.locals.bUserExists);
+      logger.info(`[authController.js] checkForExistingUser:  res.locals.bUserExists: ${res.locals.bUserExists}`);
 
       return next();
     }
@@ -124,7 +124,7 @@ checkForExistingUser(req, res, next){
 
     logger.info('[authController.js] addUser:  entering middleware');
 
-    logger.info('[authController.js] addUser:  res.locals.bUserExists:', res.locals.bUserExists);
+    logger.info(`[authController.js] addUser:  res.locals.bUserExists: ${res.locals.bUserExists}`);
 
     if (res.locals.bUserExists){
       // user already exists
@@ -178,17 +178,19 @@ checkForExistingUser(req, res, next){
 //  └──────────────────────────────┘
   generateRoomId(req, res, next){
 
-  logger.info('[authController.js] generateRoomId:  entering middleware');
-  
-  // generate the roomId;
-  const roomId = randomstring.generate(4);
+    logger.info('[authController.js] generateRoomId:  entering middleware');
     
-  logger.info(`[authController.js] generateRoomId:  roomId: ${roomId}`);
+    // generate the roomId;
+    const roomId = randomstring.generate(4);
+      
+    logger.info(`[authController.js] generateRoomId:  roomId: ${roomId}`);
 
-  // add roomId to response object
-  res.locals.roomId = roomId;
+    // add roomId to response object
+    res.locals.roomId = roomId;
 
-  logger.info(`[authController.js] generateRoomId:  res.locals.roomId: ${res.locals.roomId}`);
+    logger.info(`[authController.js] generateRoomId:  res.locals.roomId: ${res.locals.roomId}`);
+
+    return next();
 
   } // end of generateRoomId()
 
