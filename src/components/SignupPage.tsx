@@ -45,12 +45,12 @@ const SignUp = () => {
           return response.json();
         })
         .then((data) => {
-          if (!data) {
+          if (data === 'username already exists') {
             // if the username/password isnt submitted
             setwrongInfo(true);
           } else {
-            newName(name);
-            newUserID(data);
+            newName(data.name);
+            newUserID(data.user_id);
             return (
               <Router>
                 <Switch>
