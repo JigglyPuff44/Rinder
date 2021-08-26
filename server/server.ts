@@ -1,9 +1,9 @@
 /**
  * ************************************
  *
- * @file        server.js
+ * @file        server.ts
  * @description Server listens on port 3000 and routes all incoming requests, handles global middleware errors and unknown endpoint errors
- * @author      Emma Czech, Faraz Moallemi, May Li, Ted Craig
+ * @author      Ted Craig
  * @date        2021.08.24
  * @link        https://github.com/JigglyPuff44/Rinder.git
  * @since       0.1.0
@@ -14,12 +14,15 @@
 //  ┌──────────────────────────────┐
 //  │        MODULE IMPORTS        │
 //  └──────────────────────────────┘
-import express, { Request, Response, NextFunction } from 'express';                                         // express server functionality
+import express, { Request, Response, NextFunction } from 'express';    // express server functionality
 import path from 'path';                                               // file path tools - filesystem agnostic path structures
 import cookieParser from 'cookie-parser';                              // cookie middleware
 import logger from './logger';                                         // logger created using winston logging library (to prevent typescript from complaining about console logs)
 import randomstring from 'randomstring';                               // random alphanumeric string generator used to create room ID
-
+import { AuthController } from './controllers/authController.js';          // authentication middleware
+//import { authController } from './controllers/authController_obj-style';
+// import { Middleware } from '../temp/types-backend';
+// import { authController } from './controllers/authController_obj-style';
 
 //  ┌──────────────────────────────┐
 //  │          CONSTANTS           │
@@ -27,7 +30,7 @@ import randomstring from 'randomstring';                               // random
 const app = express();                                                // create express server
 const PORT = process.env.PORT || 3000;                                // set constant for the port, default to 3000
 // const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
-
+const authController: AuthController = new AuthController();
 
 //  ┌──────────────────────────────┐
 //  │   PRE- PARSING / FORMATTING  │
@@ -41,19 +44,32 @@ app.use(cookieParser());                          // parse any cookies found in 
 //  │           ROUTING            │
 //  └──────────────────────────────┘
 
+//  ========= POST: /LOGIN =========
+app.post('/login',
+  (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`[server.ts] app.post '/login' endpoint requested...`)
+    return next();
+  },
+  <any>authController.verifyUser,
+  (req: Request, res: Response) => {
+    logger.info(`[server.ts] app.post '/login' endpoint: res.locals.userInfo:\n`, res.locals.userInfo)
+    res.json(res.locals.userInfo)
+  }
+); // end of POST: /login
 
-//  ============== / ===============
+
+//  ============ GET: / ============
 app.get('/', (req: Request, res: Response) => {
   logger.info(`[server.js] app.get '/' endpoint requested...`);
   res.send(`You've contacted endpoint '/'`);
-});
+}); // end of GET: /
 
 
 
 //  ============= 404 ==============
 app.use( (req: Request, res: Response) =>{
   res.status(404).send('Unable to fulfill your request');
-});
+}); // end of 404
 
 
 //  ┌──────────────────────────────┐
