@@ -19,7 +19,7 @@ const Login = () => {
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
 
-  const currentUserID: any = useSelector<RootState>((state) => state.store);
+  const store: any = useSelector<RootState>((state) => state.store);
 
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
@@ -53,7 +53,7 @@ const Login = () => {
             return (
               <Router>
                 <Switch>
-                  <Route path={`/home/${currentUserID.userID}`}>
+                  <Route path={`/home/${store.userID}`}>
                     <HomePage />
                   </Route>
                 </Switch>
