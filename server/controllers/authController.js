@@ -308,6 +308,71 @@ checkForExistingUser(req, res, next){
     
   } // end of addRoomToUser()
 
+
+//  ┌──────────────────────────────┐
+//  |      GET WAITING USERS       |
+//  └──────────────────────────────┘
+  getWaitingUsers(req, res, next) {
+    logger.info('[authController.js] getRestaurantList:  entering middleware');
+    logger.info(`[authController.js] getRestaurantList:  incoming req.body: ${req.body}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.roomId: ${res.locals.roomId}`);
+
+    const { roomId } = req.params;
+    const waitingRoomText = 'SELECT name FROM users WHERE room = $1';
+
+    return next();
+  } // end of getWaitingUsers()
+
+
+//  ┌──────────────────────────────┐
+//  |     GET RESTAURANT LIST      |
+//  └──────────────────────────────┘
+  getRestaurantList(req, res, next){
+
+    logger.info('[authController.js] getRestaurantList:  entering middleware');
+
+    // logger.info(`[authController.js] getRestaurantList:  incoming req.body: ${req.body}`);
+    // logger.info(`[authController.js] getRestaurantList:  incoming res.locals.bRoomExists: ${res.locals.bRoomExists}`);
+    // logger.info(`[authController.js] getRestaurantList:  incoming res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.roomId: ${res.locals.roomId}`);
+
+    // we will assume, for now, that the roomId is valid, meaning there will be restaurants that match
+
+      // define SQL query string and parameteric values
+      const queryText = 'SELECT * FROM restaurants WHERE room = $1'
+      const queryValues = [res.locals.roomId];
+      
+      // submit query to the database
+      //pool.query(queryText, queryValues, (err, result) =>{
+      db.query(queryText, queryValues, (err, result) => {
+        if (err){
+          // handle error here
+          // pass the error message object into next() in order to trigger the global error handler
+          return next(err);
+        } else {
+          
+          logger.info('[authController.js] getRestaurantList:  result.rows: ', result.rows);
+          
+          // assign result as restaurantList to locals property on response object
+          res.locals.restaurantList = result.rows;
+                    
+          logger.info('[authController.js] getRestaurantList:  res.locals.restaurantList: ', res.locals.restaurantList);
+
+          return next();
+        }
+
+      }); // end of query
+    
+  } // end of getRestaurantList()
+
+
+  //  ┌───────────────────────┐
+  // <│ END OF AUTHCONTROLLER │>
+  //  └───────────────────────┘
+  //   all methods must reside
+  //      above this point
+
 } // end of AuthController
 
 

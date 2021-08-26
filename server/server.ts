@@ -142,6 +142,7 @@ app.get('/roomID/:userId',
 
 ); // end of GET: /roomID
 
+
 //  ========= POST: /ROOMID ======== 
 // when user tries to join a room by clicking the join room body
 app.post('/roomID',
@@ -166,7 +167,78 @@ app.post('/roomID',
     }
   }
 
-); // end of POST: /roomId
+); // end of POST: /roomID
+
+
+// //  ========= GET: /waiting =========
+// // when user pushes either the join room or the create room button
+// app.get('/waiting/:roomID',
+
+//   (req: Request, res: Response, next: NextFunction) => {
+//     logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.get '/waiting/:roomID' ${colorLogMain}endpoint requested...${colorReset}`);
+
+//     logger.info(`[server.ts] app.get '/waiting/roomID': `);
+
+//     // // assign userId to res.locals.userId
+//     // res.locals.userId = req.params.userId;
+
+//     logger.info(`[server.ts] app.get '/roomID':  res.locals.userId: ${res.locals.userId}`);
+
+//     return next();
+//   },
+
+//   <any>authController.generateRoomId,
+
+//   <any>authController.addRoomToUser,
+
+//   (req: Request, res: Response) => {
+//     //const roomId = res.locals.roomId;
+//     //console.log(roomId);
+//     logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.roomId: ${res.locals.roomId}`);
+//     logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.userId: ${res.locals.userId}`);
+//     logger.info(`[server.ts] app.get '/roomID' endpoint: res.locals.roomAdded: `, res.locals.roomAdded);
+    
+//     // what does the frontend want back?
+//     // for now -- just sending roomId string
+//     res.json(res.locals.roomId);
+//   }
+
+//); // end of GET: /roomID
+
+
+
+//  ========= GET: /RESTAURANTS ======== 
+// from waiting room.  This request assumes that a group of restaurants has already had the target room number added to each of their room fields in the database
+app.get('/restaurants/:roomId',
+
+  (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.get '/restaurants' ${colorLogMain}endpoint requested...${colorReset}`);
+
+    logger.info(`[server.ts] app.get '/restaurants/:roomId':  req.params.roomId: ${req.params.roomId} (assigning to res.locals.roomId)`);
+
+    // assign userId to res.locals.userId
+    res.locals.roomId = req.params.roomId;
+
+    logger.info(`[server.ts] app.get '/restaurants/:roomId':  res.locals.roomId: ${res.locals.roomId}`);
+
+    return next();
+  },
+
+  <any>authController.getRestaurantList,
+
+  (req: Request, res: Response) => {
+    logger.info(`[server.ts] app.get '/restaurants/:roomId' endpoint: res.locals.restaurantList:\n`, res.locals.restaurantList);
+    if (res.locals.restaurantList){
+      // send restaurant list to front end
+      res.json(res.locals.restaurantList);
+    } else {
+      logger.info(`[server.ts] app.get '/restaurants/:roomId' failed`);
+      res.json('no restaurants found');
+    }
+  }
+
+); // end of GET: /restaurants/:roomId
+
 
 
 //  ============ GET: / ============
