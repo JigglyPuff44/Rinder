@@ -13,7 +13,6 @@ import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
 import WaitingRoom from "./WaitingRoom";
 
-const axios = require("axios");
 
 // page needs text with user name at the top
 // div with create room button and location input text box
