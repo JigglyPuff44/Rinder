@@ -42,6 +42,7 @@ const SignUp = () => {
         body: JSON.stringify(signUpBody),
       })
         .then((response) => {
+          console.log('it hit the api call');
           return response.json();
         })
         .then((data) => {
@@ -51,21 +52,15 @@ const SignUp = () => {
           } else {
             newName(data.name);
             newUserID(data.user_id);
+            console.log('this is user_id', data.user_id);
             return (
-              <Router>
-                <Switch>
-                  <Route path={`/home/${currentUserID.userID}`}>
-                    <HomePage />
-                  </Route>
-                </Switch>
-              </Router>
+              <Redirect to={`/home/${currentUserID.userID}`}/>
             );
           }
         })
         .catch((err) => console.log('this is err', err));
     }
   };
-
   return (
     <div className='SignupPage'>
       <h1>Sign Up</h1>
@@ -95,7 +90,7 @@ const SignUp = () => {
           />
         </label>
         <div className='signUpButton'>
-          <button type='submit'>Login</button>
+          <button type='submit'>Sign Up</button>
         </div>
         {missingInfo ? <div>Please fill in all fields</div> : null}
         {wrongInfo ? <div>Please enter correct information</div> : null}

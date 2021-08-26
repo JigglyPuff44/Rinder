@@ -87,13 +87,7 @@ const HomePage = () => {
         .then(() => genRoomID())
         .then(() => {
           return (
-            <Router>
-              <Switch>
-                <Route path={`/waiting/${store.roomID}`}>
-                  <WaitingRoom />
-                </Route>
-              </Switch>
-            </Router>
+            <Redirect to={`/waiting/${store.roomID}`}/>
           );
         })
         .catch((err) => console.log('this is err', err));
@@ -125,13 +119,15 @@ const HomePage = () => {
             setWrongInfo(true);
           } else {
           return (
-            <Router>
-              <Switch>
-                <Route path={`/waiting/${roomID}`}>
-                  <WaitingRoom />
-                </Route>
-              </Switch>
-            </Router>
+
+            <Redirect to={`/waiting/${roomID}`}/>
+            // <Router>
+            //   <Switch>
+            //     <Route path={`/waiting/${roomID}`}>
+            //       <WaitingRoom />
+            //     </Route>
+            //   </Switch>
+            // </Router>
           )}
         })
         .catch(err => console.log('this is err', err));

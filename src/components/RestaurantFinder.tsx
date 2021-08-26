@@ -4,10 +4,10 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Redirect,
 } from "react-router-dom";
 import { RootState } from "../state/reducers";
 import Results from "./Results";
-
 
 const RestaurantFinder = () => {
   const dispatch = useDispatch();
@@ -18,17 +18,9 @@ const RestaurantFinder = () => {
     if (index < 11) {
       setIndex(index + 1);
     } else if (index === 10) {
-      return (
-        <Router>
-          <Switch>
-            <Route path={`/result/${store.roomID}`}>
-              <Results/>
-            </Route>
-          </Switch>
-        </Router>
-      )
+      return <Redirect to={`/result/${store.roomID}`} />;
     }
-  }
+  };
 
   const handleSwipeYes = () => {
     // increment this pictures likeTotal by 1
@@ -38,27 +30,19 @@ const RestaurantFinder = () => {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-      }, 
-      body: JSON.stringify(store.restList[index].restaurantID) //from database primary key 
+      },
+      body: JSON.stringify(store.restList[index].restaurantID), //from database primary key
     })
-    .then((response) => response.json())
-    .catch((err) => {
-      console.log("err in post request in front end", err);
-    })
+      .then((response) => response.json())
+      .catch((err) => {
+        console.log("err in post request in front end", err);
+      });
     if (index < 11) {
       setIndex(index + 1);
     } else if (index === 10) {
-      return (
-        <Router>
-          <Switch>
-            <Route path={`/results/${store.roomID}`}>
-              <Results/>
-            </Route>
-          </Switch>
-        </Router>
-      )
+      return <Redirect to={`/results/${store.roomID}`} />;
     }
-  }
+  };
 
   // create image linked to api
   return (
@@ -68,10 +52,10 @@ const RestaurantFinder = () => {
       </div>
       <hr></hr>
       <div className="individualRest">
-          <h1>{store.restList[index].name}</h1>
-          <img src={store.restList[index].photo} />
-          <h2>Rating: {store.restList[index].rating}/5</h2>
-          <h2>Address: {store.restList[index].address}</h2>
+        <h1>{store.restList[index].name}</h1>
+        <img src={store.restList[index].photo} />
+        <h2>Rating: {store.restList[index].rating}/5</h2>
+        <h2>Address: {store.restList[index].address}</h2>
       </div>
       <div className="swipeLeftButton">
         <button onClick={handleSwipeNo}>Eww</button>
@@ -80,7 +64,7 @@ const RestaurantFinder = () => {
         <button onClick={handleSwipeYes}>Yum</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RestaurantFinder
+export default RestaurantFinder;

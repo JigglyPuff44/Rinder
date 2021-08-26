@@ -7,13 +7,11 @@ import {
   Route,
   Switch,
   Redirect,
-  withRouter,
 } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "./state";
 import { RootState } from "./state/reducers";
 import HomePage from "./components/HomePage";
-import SignUp from "./components/SignupPage";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -25,20 +23,6 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
-
-  const switchUser = () => {
-    console.log("this is switchUsra");
-    return (
-      <Router>
-        <Redirect to="/signUp" />
-        <Switch>
-          <Route exact path="/signUp" component={SignUp}/>
-            {/* <SignUp /> */}
-          {/* </Route> */}
-        </Switch>
-      </Router>
-    );
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,37 +44,21 @@ const Login = () => {
           return response.json();
         })
         .then((data) => {
-          if (data === "username/password is incorrect") {
+          if (!data) {
             // if the username/password is incorrect
             setwrongInfo(true);
           } else {
             newUserID(data.user_id);
             newName(data.name);
-            return (
-              <Router>
-                <Switch>
-                  <Route path={`/home/${store.userID}`}>
-                    <HomePage />
-                  </Route>
-                </Switch>
-              </Router>
-            );
+            return <Redirect to={`/home/${store.user_id}`} />;
           }
         })
         .catch((err) => console.log("this is err", err));
     }
   };
-  if (document.cookie) {
-    return (
-      <Router>
-        <Switch>
-          <Route path="/home/:userID">
-            <HomePage />
-          </Route>
-        </Switch>
-      </Router>
-    );
-  } else {
+  // if (document.cookie) {
+  //   return <Redirect to="/home/:userID" />;
+  // } else {
     return (
       <div className="login">
         <h1>Login</h1>
@@ -114,16 +82,16 @@ const Login = () => {
           <div className="loginButton">
             <button type="submit">Login</button>
           </div>
+          <div className="noAccount">
+            Don't have an account?{" "}
+            <NavLink to="/Signup">Create Account</NavLink>
+          </div>
           {missingInfo ? <div>Please fill in all fields</div> : null}
           {wrongInfo ? <div>Please enter correct information</div> : null}
         </form>
-        <div className="noAccount">
-          Don't have an account?
-          <button onClick={switchUser}>Create an Account</button>
-        </div>
       </div>
     );
-  }
+  // }
 };
 
-export default withRouter(Login);
+export default Login;

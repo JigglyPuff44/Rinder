@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
@@ -21,13 +21,7 @@ const Results = () => {
   // when home button is clicked, redirects to homepage
   const routeHome = () => {
     return (
-      <Router>
-        <Switch>
-          <Route path={`/home/${store.userID}`}>
-            <HomePage />
-          </Route>
-        </Switch>
-      </Router>
+      <Redirect to={`/home/${store.roomID}`}/>
     );
   };
   return (
