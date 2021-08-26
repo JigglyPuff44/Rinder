@@ -1,5 +1,5 @@
-import React, { useState, Dispatch } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, Dispatch } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
   NavLink,
@@ -7,22 +7,22 @@ import {
   Route,
   Switch,
   Redirect,
-} from "react-router-dom";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "./state";
-import { RootState } from "./state/reducers";
-import HomePage from "./components/HomePage";
+} from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from './state';
+import { RootState } from './state/reducers';
+import HomePage from './components/HomePage';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [missingInfo, setmissingInfo] = useState(false);
   const [wrongInfo, setwrongInfo] = useState(false);
 
-  const currentUserID: any = useSelector<RootState>((state) => state.store);
+  const store: any = useSelector<RootState>((state) => state.store);
 
   const dispatch = useDispatch();
-  const { newUserID } = bindActionCreators(actionCreators, dispatch);
+  const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,11 +32,11 @@ const Login = () => {
       setmissingInfo(true);
     } else {
       // sends username and password to server
-      fetch("/login", {
-        method: "POST",
-        mode: "cors",
+      fetch('/login', {
+        method: 'POST',
+        mode: 'cors',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(frontBody),
       })
@@ -48,11 +48,12 @@ const Login = () => {
             // if the username/password is incorrect
             setwrongInfo(true);
           } else {
-            newUserID(data);
+            newUserID(data[0].userID);
+            newName(data[0].name);
             return (
               <Router>
                 <Switch>
-                  <Route path={`/home/${currentUserID.userID}`}>
+                  <Route path={`/home/${store.userID}`}>
                     <HomePage />
                   </Route>
                 </Switch>
@@ -60,44 +61,44 @@ const Login = () => {
             );
           }
         })
-        .catch((err) => console.log("this is err", err));
+        .catch((err) => console.log('this is err', err));
     }
   };
   if (document.cookie) {
     return (
       <Router>
         <Switch>
-          <Route path="/home/:userID">{/* <HomePage /> */}</Route>
+          <Route path='/home/:userID'>{/* <HomePage /> */}</Route>
         </Switch>
       </Router>
     );
   } else {
     return (
-      <div className="login">
+      <div className='login'>
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
           <label>
             <p>Username</p>
             <input
-              type="text"
-              name="username"
+              type='text'
+              name='username'
               onChange={(event) => setUsername(event.target.value)}
             />
           </label>
           <label>
             <p>Password</p>
             <input
-              type="password"
-              name="password"
+              type='password'
+              name='password'
               onChange={(event) => setPassword(event.target.value)}
             />
           </label>
-          <div className="loginButton">
-            <button type="submit">Login</button>
+          <div className='loginButton'>
+            <button type='submit'>Login</button>
           </div>
-          <div className="noAccount">
-            Don't have an account?{" "}
-            <NavLink to="/Signup">Create Account</NavLink>
+          <div className='noAccount'>
+            Don't have an account?{' '}
+            <NavLink to='/Signup'>Create Account</NavLink>
           </div>
           {missingInfo ? <div>Please fill in all fields</div> : null}
           {wrongInfo ? <div>Please enter correct information</div> : null}
