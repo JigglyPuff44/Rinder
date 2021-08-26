@@ -44,12 +44,12 @@ const Login = () => {
           return response.json();
         })
         .then((data) => {
-          if (!data) {
+          if (data === 'username/password is incorrect') {
             // if the username/password is incorrect
             setwrongInfo(true);
           } else {
-            newUserID(data[0].userID);
-            newName(data[0].name);
+            newUserID(data.user_id);
+            newName(data.name);
             return (
               <Router>
                 <Switch>
@@ -68,7 +68,9 @@ const Login = () => {
     return (
       <Router>
         <Switch>
-          <Route path='/home/:userID'>{/* <HomePage /> */}</Route>
+          <Route path='/home/:userID'>
+            <HomePage />
+          </Route>
         </Switch>
       </Router>
     );
