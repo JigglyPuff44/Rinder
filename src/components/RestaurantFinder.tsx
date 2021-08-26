@@ -11,6 +11,8 @@ import {
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
+import Restaurant from "./Restaurant";
+import Resaurant from './Restaurant';
 
 
 const RestaurantFinder = () => {
@@ -48,24 +50,24 @@ const RestaurantFinder = () => {
       }
     })
     .then((response) => response.json())
+    .then()
     .catch((err) => {
       console.log("err in post request in front end", err);
     })
   }
-  
+  for(let i = 0; i < 11; i += 1) {
+    <Restaurant key={i}></Restaurant>
+  }
   // create image linked to api
   return (
     <div>
       <div className="header">
         <h1>Room ID Number: {currentRoomID.roomID}</h1>
-        <h2>Choose a restaurant: </h2>
         <hr></hr>
-        <h2>Current Restaurant Name: </h2>
       </div>
       <div className="swipeLeftButton">
         <button onClick={handleSwipeLeft}>Eww</button>
       </div>
-      <label>Rating: </label>
       <div className="swipeRightButton">
         <button onClick={handleSwipeRight}>Yum</button>
       </div>
