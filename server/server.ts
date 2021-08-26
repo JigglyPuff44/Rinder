@@ -58,6 +58,7 @@ app.use(cookieParser());                          // parse any cookies found in 
 //  └──────────────────────────────┘
 
 //  ========= POST: /LOGIN =========
+// when user pushes the log in button
 app.post('/login',
   
   (req: Request, res: Response, next: NextFunction) => {
@@ -80,6 +81,7 @@ app.post('/login',
 
 
 //  ========= POST: /SIGNUP ========
+// when user pushes the sign up button
 app.post('/signUp',
 
   (req: Request, res: Response, next: NextFunction) => {
@@ -96,19 +98,17 @@ app.post('/signUp',
     if (res.locals.bUserExists){
       logger.info(`[server.ts] app.post '/signUp' username already exists ...`);
       res.json('username already exists');
+    } else if(res.locals.userInfo === undefined) {
+      res.json('username already exists'); // this should really be a different response
     } else {
-      if (res.locals.userInfo === undefined){
-        res.json('username already exists'); // this should really be a different response
-      } else {
-        res.json(res.locals.userInfo);
-      }
+      res.json(res.locals.userInfo);
     }
   }
-
 ); // end of POST: /signUp
 
 
 //  ========= GET: /ROOMID =========
+// when user pushes the create room button
 app.get('/roomID/:userId',
 
   (req: Request, res: Response, next: NextFunction) => {
@@ -142,8 +142,35 @@ app.get('/roomID/:userId',
 
 ); // end of GET: /roomID
 
+//  ========= POST: /ROOMID ======== 
+// when user tries to join a room by clicking the join room body
+app.post('/roomID',
+
+  (req: Request, res: Response, next: NextFunction) => {
+    logger.info(`${colorLogMain}[server.ts] ${colorLogBright}app.post '/roomID' ${colorLogMain}endpoint requested...${colorReset}`);
+    return next();
+  },
+
+  <any>authController.checkForRoomId,
+
+  <any>authController.addRoomToUser,
+
+  (req: Request, res: Response) => {
+    logger.info(`[server.ts] app.post '/roomID' endpoint: res.locals.userInfo:\n`, res.locals.userInfo);
+    if (res.locals.bRoomExists){
+      logger.info(`[server.ts] app.post '/roomID' successful, routing to room: ${res.locals.roomId}`);
+      res.json(`routing to room: ${res.locals.roomId}`);
+    } else {
+      logger.info(`[server.ts] app.post '/roomID' failed`);
+      res.json('roomId does not exist');
+    }
+  }
+
+); // end of POST: /roomId
+
 
 //  ============ GET: / ============
+// loading the static main page
 app.get('/', (req: Request, res: Response) => {
   logger.info(`[server.js] app.get '/' endpoint requested...`);
   res.send(`You've contacted endpoint '/'`);
@@ -152,6 +179,7 @@ app.get('/', (req: Request, res: Response) => {
 
 
 //  ============= 404 ==============
+// error 404 handler
 app.use( (req: Request, res: Response) =>{
   res.status(404).send('Unable to fulfill your request');
 }); // end of 404
