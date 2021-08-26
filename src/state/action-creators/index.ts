@@ -2,11 +2,11 @@ import { Dispatch } from 'redux';
 import { ActionType } from '../action-types';
 import { Action } from '../actions/index';
 
-export const newUserID = (userID: number) => {
+export const newUserID = (user_id: number) => {
   return (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.USERID,
-      payload: userID,
+      payload: user_id,
     });
   };
 };

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
 import { RootState } from "../state/reducers";
@@ -11,6 +11,7 @@ const Results = () => {
   const { newRestResult } = bindActionCreators(actionCreators, dispatch);
   const store: any = useSelector<RootState>((state) => state.store);
 
+  let history = useHistory();
   // when page loads, makes get request to server for most liked restaurant & saves in store
   useEffect(() => {
     fetch("/mostLiked")
@@ -20,9 +21,7 @@ const Results = () => {
   });
   // when home button is clicked, redirects to homepage
   const routeHome = () => {
-    return (
-      <Redirect to={`/home/${store.roomID}`}/>
-    );
+    return history.push(`/home/${store.user_id}`);
   };
   return (
     <div>

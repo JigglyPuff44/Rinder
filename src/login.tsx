@@ -12,6 +12,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "./state";
 import { RootState } from "./state/reducers";
 import HomePage from "./components/HomePage";
+import { newUserList } from "./state/action-creators";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -23,8 +24,11 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const { newUserID, newName } = bindActionCreators(actionCreators, dispatch);
+  const bindAction = bindActionCreators(actionCreators, dispatch);
+
 
   let history = useHistory();
+  let returnData:any;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -50,10 +54,21 @@ const Login = () => {
             // if the username/password is incorrect
             setwrongInfo(true);
           } else {
-            newUserID(data.user_id);
-            newName(data.name);
-            return history.push(`/home/${store.user_id}`);
+            returnData = data;
+            console.log('data_user', data.user_id)
+            console.log('bind actions', bindAction);
+            // newUserID(30);
+            // console.log('this is newUserID', newUserID(30));
           }
+        })
+        .then(() => {
+          console.log('this is newUserID', newUserID(30));
+        })
+        // .then(() => newName(returnData.name))
+        .then(() => {
+          console.log('this is store_user', store.user_id);
+          console.log('this is store', store);
+          history.push(`/home/${store.user_id}`);
         })
         .catch((err) => console.log("this is err", err));
     }

@@ -20,6 +20,7 @@ import cookieParser from 'cookie-parser';                              // cookie
 import logger from './logger';                                         // logger created using winston logging library (to prevent typescript from complaining about console logs)
 import randomstring from 'randomstring';                               // random alphanumeric string generator used to create room ID
 import { AuthController } from './controllers/authController.js';          // authentication middleware
+const cors = require('cors'); 
 //import { authController } from './controllers/authController_obj-style';
 // import { Middleware } from '../temp/types-backend';
 // import { authController } from './controllers/authController_obj-style';
@@ -28,6 +29,7 @@ import { AuthController } from './controllers/authController.js';          // au
 //  │          CONSTANTS           │
 //  └──────────────────────────────┘
 const app = express();                                                // create express server
+app.use(cors());
 const PORT = process.env.PORT || 3000;                                // set constant for the port, default to 3000
 // const DEBUG = (process.env.NODE_ENV === 'development') || false;      // set debug flag for use in logging, default to false
 const authController: AuthController = new AuthController();
