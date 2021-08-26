@@ -30,10 +30,4 @@ interface NameAction {
   payload: string;
 }
 
-export type Action =
-  | UserIDAction
-  | RoomIDAction
-  | UserListAction
-  | RestListAction
-  | NameAction
-  | RestResultAction;
+export type Action = UserIDAction | RoomIDAction | UserListAction | RestListAction | NameAction | RestResultAction;
