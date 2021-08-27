@@ -2,7 +2,7 @@
  * ************************************
  *
  * @file        authControler.js
- * @description exports middleware for handling user authentication
+ * @description exports AuthController class containing middleware for handling user authentication
  * @author      Ted Craig
  * @date        2021.08.25
  * @link        https://github.com/JigglyPuff44/Rinder.git
@@ -11,7 +11,11 @@
  * ************************************
  */
 
+//  ┌──────────────────────────────┐
+//  │            EXPORT            │
+//  └──────────────────────────────┘
 export { AuthController };  // export to stop TypeScript from complaining when importing authController into server.js
+
 
 //  ┌──────────────────────────────┐
 //  │        MODULE IMPORTS        │
@@ -180,32 +184,199 @@ checkForExistingUser(req, res, next){
 
     logger.info('[authController.js] generateRoomId:  entering middleware');
     
+    logger.info(`[authController.js] generateRoomId:  incoming res.locals.userId: ${res.locals.userId}`);
+
     // generate the roomId;
     const roomId = randomstring.generate(4);
       
-    logger.info(`[authController.js] generateRoomId:  roomId: ${roomId}`);
+    logger.info(`[authController.js] generateRoomId:  generated roomId: ${roomId}`);
 
     // add roomId to response object
     res.locals.roomId = roomId;
 
-    logger.info(`[authController.js] generateRoomId:  res.locals.roomId: ${res.locals.roomId}`);
+    logger.info(`[authController.js] generateRoomId:  assigned res.locals.roomId: ${res.locals.roomId}`);
+
+    // set flag indicating that the room exists. This is for use in the addRoomToUser method.
+    res.locals.bRoomExists = true;
+        
+    logger.info(`[authController.js] generateRoomId:  res.locals.bRoomExists: ${res.locals.bRoomExists}`);
 
     return next();
 
   } // end of generateRoomId()
 
 
-} // end of AuthController
- 
+//  ┌──────────────────────────────┐
+//  |      CHECK FOR ROOM ID       |
+//  └──────────────────────────────┘
+  checkForRoomId(req, res, next){
+
+    logger.info('[authController.js] checkForRoomId:  entering middleware');
+
+    logger.info(`[authController.js] checkForRoomId:  incoming req.body:`, req.body);
+    
+    // future site of incoming data validation and error handling
+
+    const { userId, roomId} = req.body;
+
+    res.locals.userId = userId;
+    res.locals.roomId = roomId;
+
+    logger.info(`[authController.js] checkForRoomId:  res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] checkForRoomId:  res.locals.roomId: ${res.locals.roomId}`);
+
+    // define SQL query string and parameteric values
+    const queryText = 'SELECT user_id FROM users WHERE room = $1';
+    const queryValues = [res.locals.roomId];
+
+    // submit query to the database
+    //pool.query(queryText, queryValues, (err, result) =>{
+    db.query(queryText, queryValues, (err, result) => {
+      if (err){
+        // handle error here
+        // pass the error message object into next() in order to trigger the global error handler
+        return next(err);
+      } else {
+        
+        logger.info('[authController.js] checkForRoomId:  result.rows: ', result.rows);
+        
+        // set flag to indicate whether or not we found a match for the given roomId within the database
+        res.locals.bRoomExists = result.rows.length > 0;
+        
+        logger.info(`[authController.js] checkForRoomId:  res.locals.bRoomExists: ${res.locals.bRoomExists}`);
+
+        return next();
+      }
+
+    }); // end of query
+    
+  } // end of checkForRoomId()
 
 
 //  ┌──────────────────────────────┐
-//  │ INSTANTIATE AUTH CONTROLLER  │
-//  └──────────────────────────────┘ 
-// const authControler = new AuthController();
+//  |       ADD ROOM TO USER       |
+//  └──────────────────────────────┘
+  addRoomToUser(req, res, next){
+
+    logger.info('[authController.js] addRoomToUser:  entering middleware');
+
+    logger.info(`[authController.js] addRoomToUser:  incoming req.body: ${req.body}`);
+    logger.info(`[authController.js] addRoomToUser:  incoming res.locals.bRoomExists: ${res.locals.bRoomExists}`);
+    logger.info(`[authController.js] addRoomToUser:  incoming res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] addRoomToUser:  incoming res.locals.roomId: ${res.locals.roomId}`);
+
+    // check if the room already exists.  If so, go ahead and add it to the user's row in the db
+    if (res.locals.bRoomExists && res.locals.userId && res.locals.roomId){
+
+      // define SQL query string and parameteric values
+      const queryText = 'UPDATE users SET room = $1 WHERE user_id = $2 RETURNING user_id, room'
+      const queryValues = [res.locals.roomId, res.locals.userId];
+      
+      // submit query to the database
+      //pool.query(queryText, queryValues, (err, result) =>{
+      db.query(queryText, queryValues, (err, result) => {
+        if (err){
+          // handle error here
+          // pass the error message object into next() in order to trigger the global error handler
+          return next(err);
+        } else {
+          
+          logger.info('[authController.js] addRoomToUser:  result.rows: ', result.rows);
+          
+          // assign result as userID to locals property on response object
+          res.locals.roomAdded = result.rows[0];
+          
+          logger.info('[authController.js] addRoomToUser:  result.rows[0]: ', result.rows[0]);
+          logger.info('[authController.js] addRoomToUser:  res.locals.roomAdded: ', res.locals.roomAdded);
+
+          return next();
+        }
+
+      }); // end of query
+    
+    } else {
+
+      // room does not already exist
+
+      res.locals.roomAdded = 'room not found';
+
+      logger.info('[authController.js] addRoomToUser:  res.locals.roomAdded: ', res.locals.roomAdded);
+
+      return next();
+
+    } // end if (res.locals.bRoomExists)
+    
+  } // end of addRoomToUser()
+
+
+//  ┌──────────────────────────────┐
+//  |      GET WAITING USERS       |
+//  └──────────────────────────────┘
+  getWaitingUsers(req, res, next) {
+    logger.info('[authController.js] getRestaurantList:  entering middleware');
+    logger.info(`[authController.js] getRestaurantList:  incoming req.body: ${req.body}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.roomId: ${res.locals.roomId}`);
+
+    const { roomId } = req.params;
+    const waitingRoomText = 'SELECT name FROM users WHERE room = $1';
+
+    return next();
+  } // end of getWaitingUsers()
+
+
+//  ┌──────────────────────────────┐
+//  |     GET RESTAURANT LIST      |
+//  └──────────────────────────────┘
+  getRestaurantList(req, res, next){
+
+    logger.info('[authController.js] getRestaurantList:  entering middleware');
+
+    // logger.info(`[authController.js] getRestaurantList:  incoming req.body: ${req.body}`);
+    // logger.info(`[authController.js] getRestaurantList:  incoming res.locals.bRoomExists: ${res.locals.bRoomExists}`);
+    // logger.info(`[authController.js] getRestaurantList:  incoming res.locals.userId: ${res.locals.userId}`);
+    logger.info(`[authController.js] getRestaurantList:  incoming res.locals.roomId: ${res.locals.roomId}`);
+
+    // we will assume, for now, that the roomId is valid, meaning there will be restaurants that match
+
+      // define SQL query string and parameteric values
+      const queryText = 'SELECT * FROM restaurants WHERE room = $1'
+      const queryValues = [res.locals.roomId];
+      
+      // submit query to the database
+      //pool.query(queryText, queryValues, (err, result) =>{
+      db.query(queryText, queryValues, (err, result) => {
+        if (err){
+          // handle error here
+          // pass the error message object into next() in order to trigger the global error handler
+          return next(err);
+        } else {
+          
+          logger.info('[authController.js] getRestaurantList:  result.rows: ', result.rows);
+          
+          // assign result as restaurantList to locals property on response object
+          res.locals.restaurantList = result.rows;
+                    
+          logger.info('[authController.js] getRestaurantList:  res.locals.restaurantList: ', res.locals.restaurantList);
+
+          return next();
+        }
+
+      }); // end of query
+    
+  } // end of getRestaurantList()
+
+
+  //  ┌───────────────────────┐
+  // <│ END OF AUTHCONTROLLER │>
+  //  └───────────────────────┘
+  //   all methods must reside
+  //      above this point
+
+} // end of AuthController
 
 
 //  ┌──────────────────────────────┐
 //  │            EXPORT            │
 //  └──────────────────────────────┘
-// module.exports = authControler;
+// module.exports = authControler;   // nevermind -- typescript prefers export at the top of the file

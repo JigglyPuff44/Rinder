@@ -6,6 +6,7 @@ PostgreSQL
 
 
 ## Database Schema (lite)
+This image is outdated.  Check Tables sections below for latest schema.
 
 ![](2021-08-24-21-07-42.png)
 
@@ -28,40 +29,42 @@ DROP TABLE IF EXISTS "users";
 ```sql
 INSERT INTO "users" (name,username,password,room) 
 VALUES 
-('ted','ted','password','EPP95GQK1SV9MO22X'),
-('emma','emma','password','EPP95GQK1SV9MO22X'),
-('may','may','password','EPP95GQK1SV9MO22X'),
-('faraz','faraz','password','EPP95GQK1SV9MO22X'),
-('richard','richard','password','LEQ97DBA0FQ5XW41H')
+('ted','ted','password','8KnM'),
+('emma','emma','password','8KnM'),
+('may','may','password','AwSz'),
+('faraz','faraz','password'),
+('richard','richard','password')
 ;
 ```
 
 #### restaurants
 ```sql
-CREATE TABLE "restaurants" (
-  rest_id SERIAL PRIMARY KEY,
-  address text,
-  likes integer,
-  rating numeric,
-  room varchar(255)
+create table restaurants (
+	rest_id SERIAL PRIMARY KEY,
+	name VARCHAR(50),
+	rating NUMERIC,
+	address VARCHAR(50),
+	photo VARCHAR(255),
+	likes INT,
+	room VARCHAR(50)
 );
 ```
 ```sql
 DROP TABLE IF EXISTS "restaurants";
 ```
 ```sql
-INSERT INTO "restaurants" (address,likes,rating,room) 
-VALUES 
-('Ap #923-1579 Metus. Avenue',3,4,'EPP95GQK1SV9MO22X'),
-('P.O. Box 488, 6005 Diam. Rd.',5,2,'EPP95GQK1SV9MO22X'),
-('2903 Tincidunt, Road',5,2,'EPP95GQK1SV9MO22X'),
-('784-5458 Malesuada Rd.',10,4,'EPP95GQK1SV9MO22X'),
-('Ap #155-2974 Non Avenue',9,3,'EPP95GQK1SV9MO22X'),
-('P.O. Box 726, 9138 Est, Road',7,1,'EPP95GQK1SV9MO22X'),
-('Ap #581-8321 Nulla Rd.',5,3,'EPP95GQK1SV9MO22X'),
-('P.O. Box 768, 898 Non Ave',10,3,'EPP95GQK1SV9MO22X'),
-('611-4020 Magna, St.',6,3,'EPP95GQK1SV9MO22X'),
-('3493 Mollis Street',3,4,'EPP95GQK1SV9MO22X')
+insert into restaurants (name, rating, address, photo, likes, room) 
+values 
+('Mymm', 0.2, '0 Mallard Crossing', 'http://dummyimage.com/233x100.png/cc0000/ffffff', null, null),
+('Twitterwire', 4.7, '46 Sauthoff Pass', 'http://dummyimage.com/230x100.png/dddddd/000000', null, null),
+('Dynabox', 1.2, '73390 Westend Street', 'http://dummyimage.com/188x100.png/dddddd/000000', null, '12C4'),
+('Oyonder', 3.3, '9 Green Parkway', 'http://dummyimage.com/222x100.png/cc0000/ffffff', null, null),
+('Jazzy', 0.1, '28 Warbler Pass', 'http://dummyimage.com/133x100.png/dddddd/000000', null, null),
+('Dabfeed', 2.5, '121 International Point', 'http://dummyimage.com/128x100.png/cc0000/ffffff', null, '12C4'),
+('Realpoint', 0.4, '8 Bluejay Alley', 'http://dummyimage.com/207x100.png/5fa2dd/ffffff', null, null),
+('Quatz', 1.3, '95939 Bartelt Trail', 'http://dummyimage.com/106x100.png/5fa2dd/ffffff', null, null),
+('Yadel', 2.4, '02 Maywood Crossing', 'http://dummyimage.com/153x100.png/cc0000/ffffff', null, null),
+('Photospace', 2.2, '64052 Graedel Park', 'http://dummyimage.com/210x100.png/cc0000/ffffff', null, '12C4')
 ;
 ```
 
