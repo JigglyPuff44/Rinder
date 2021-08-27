@@ -1,5 +1,8 @@
 export enum ActionType {
-    DEPOSIT = "deposit",
-    WITHDRAW = "withdraw",
-    BANKRUPT = "bankrupt"
+  USERID = 'userid',
+  ROOMID = 'roomid',
+  USERLIST = 'userlist',
+  RESTLIST = 'restlist',
+  RESTRESULT = 'restresult',
+  NAME = 'name',
 }

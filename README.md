@@ -2,14 +2,14 @@
 
 "Tinder" for restaurants
 
-#
+# Overview
 
-Tinder for Restaurants
+## What is the problem you’re solving?
+Group of users are indecisive of where to eat for dinner
 
-1. What is the problem you’re solving?
-   Group of users are indecisive of where to eat for dinner
-2. What is the solution?
-   Platform for group of users to like/dislike restaurants to narrow down a common interest
+## What is the solution?
+Platform for group of users to like/dislike restaurants to narrow down a common interest
+
 3. What is the MVP scope? (core features you must get working)
    Login page & profile
    Showcase a single restaurant to like/dislike

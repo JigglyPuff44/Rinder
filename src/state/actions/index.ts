@@ -1,17 +1,33 @@
-import { ActionType } from "../action-types/index"
+import { ActionType } from '../action-types/index';
 
-interface DepositAction {
-    type: ActionType.DEPOSIT,
-    payload: number
+interface UserIDAction {
+  type: ActionType.USERID;
+  payload: number;
 }
 
-interface WithdrawAction {
-    type: ActionType.WITHDRAW,
-    payload: number
+interface RoomIDAction {
+  type: ActionType.ROOMID;
+  payload: string;
 }
 
-interface BankruptAction {
-    type: ActionType.BANKRUPT
+interface UserListAction {
+  type: ActionType.USERLIST;
+  payload: Array<string>;
 }
 
-export type Action = DepositAction | WithdrawAction | BankruptAction;
+interface RestListAction {
+  type: ActionType.RESTLIST;
+  payload: Array<object>;
+}
+
+interface RestResultAction {
+  type: ActionType.RESTRESULT;
+  payload: object;
+}
+
+interface NameAction {
+  type: ActionType.NAME;
+  payload: string;
+}
+
+export type Action = UserIDAction | RoomIDAction | UserListAction | RestListAction | NameAction | RestResultAction;
