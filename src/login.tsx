@@ -13,6 +13,17 @@ import { actionCreators } from "./state";
 import { RootState } from "./state/reducers";
 import HomePage from "./components/HomePage";
 import { useEffect } from "react";
+import {
+  FormLabel,
+  Flex,
+  FormControl,
+  Heading,
+  Box,
+  Button,
+  Input,
+  useColorMode,
+} from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -76,39 +87,83 @@ const Login = () => {
   // if (document.cookie) {
   //   return <Redirect to="/home/:userID" />;
   // } else {
+    const { colorMode, toggleColorMode } = useColorMode();
     return (
-      <div className="login">
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
-          <label>
-            <p>Username</p>
-            <input
-              type="text"
-              name="username"
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </label>
-          <label>
-            <p>Password</p>
-            <input
-              type="password"
-              name="password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-          <div className="loginButton">
-            <button type="submit">Login</button>
+      <FormControl>
+        <Button rounded='50%' onClick={() => toggleColorMode()}>
+          {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+        </Button>
+        <Flex
+          direction='column'
+          align='center'
+          width='100%'
+          justifyContent='center'
+        >
+          <div className='login'>
+            <Flex
+              direction='column'
+              alignContent='center'
+              align='center'
+              justifyContent='center'
+            >
+              <Heading fontSize='x-large'>🍟🍜🍝Login to Rinder!🌮🌯🍔 </Heading>
+            </Flex>
+            <form onSubmit={handleSubmit}>
+              <FormLabel>Username</FormLabel>
+              <Flex
+                direction='column'
+                alignContent='center'
+                align='center'
+                justifyContent='center'
+              >
+                <Input
+                  type='text'
+                  name='username'
+                  placeholder='Enter Username'
+                  size='lg'
+                  focusBorderColor='teal'
+                  onChange={(event) => setUsername(event.target.value)}
+                />
+              </Flex>
+              <FormLabel>Password</FormLabel>
+              <Input
+                placeholder='Enter Password'
+                size='lg'
+                focusBorderColor='teal'
+                type='password'
+                name='password'
+                onChange={(event) => setPassword(event.target.value)}
+              />
+  
+              <div className='loginButton'>
+                <br></br>
+                <Flex
+                  direction='column'
+                  alignContent='center'
+                  align='center'
+                  justifyContent='center'
+                >
+                  <Button type='submit' size='md' colorScheme='cyan'>
+                    Login
+                  </Button>
+                </Flex>
+              </div>
+              <br></br>
+              <div className='noAccount'>
+                <NavLink to='/Signup'>
+                  <Button type='submit' size='md' colorScheme='cyan'>
+                    Don't have an account? Create Account!
+                  </Button>
+                </NavLink>
+              </div>
+              {missingInfo ? <div>Please fill in all fields</div> : null}
+              {wrongInfo ? <div>Please enter correct information</div> : null}
+            </form>
           </div>
-          <div className="noAccount">
-            Don't have an account?{" "}
-            <NavLink to="/Signup">Create Account</NavLink>
-          </div>
-          {missingInfo ? <div>Please fill in all fields</div> : null}
-          {wrongInfo ? <div>Please enter correct information</div> : null}
-        </form>
-      </div>
+        </Flex>
+      </FormControl>
     );
-  // }
-};
+    // }
+  };
 
 export default Login;

@@ -10,31 +10,34 @@ import "./App.css";
 import { Provider } from "react-redux";
 import { store } from "./state";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Login />
-        </Route>
-        <Route path="/signUp/">
-          <SignUp />
-        </Route>
-        <Route path="/home/">
-          <HomePage />
-        </Route>
-        <Route path="/waiting/">
-          <WaitingRoom />
-        </Route>
-        <Route path="/restaurantFinder/">
-          <RestaurantFinder />
-        </Route>
-        <Route path="/results/">
-          <Results />
-        </Route>
-      </Switch>
-    </Router>
+    <ChakraProvider>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route path="/signUp/">
+            <SignUp />
+          </Route>
+          <Route path="/home/">
+            <HomePage />
+          </Route>
+          <Route path="/waiting/">
+            <WaitingRoom />
+          </Route>
+          <Route path="/restaurantFinder/">
+            <RestaurantFinder />
+          </Route>
+          <Route path="/results/">
+            <Results />
+          </Route>
+        </Switch>
+      </Router>
+    </ChakraProvider>
   </Provider>,
   document.getElementById("app")
 );
